@@ -18,10 +18,11 @@ char board[3][3] =
 	{'_','_','_',}
 };
 string tmpBoard;
-string winsX[9] = { "XXX??????", "???XXX???", "??????XXX", "X??X??X??", "?X??X??X?", "??X??X??X", "X???X???X", "??X?X?X??" };
+string winsX[9] = {  "XXX??????", "???XXX???", "??????XXX", "X??X??X??", "?X??X??X?", "??X??X??X", "X???X???X", "??X?X?X??" };
 string winsO[9] = { "OOO??????", "???OOO???", "??????OOO", "O??O??O??", "?O??O??O?", "??O??O??O", "O???O???O", "??O?O?O??" };
 int scoreX = 0, scoreO = 0, ties = 0;
-short int x, y; // "Disposable" varibles for positions on the game board 
+short int x, y; // "Disposable" varibles for positions on the game board
+char cont; // Continue Varible 
 bool trade = true; // Switches between true, and false for each players turn
 bool startTrade = true;
 
@@ -64,9 +65,9 @@ int wildcmp(const char *wild, const char *string) {
 
 // Prints out the game board
 bool isNotFull() {
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++)
-			if(board[i][j] == '_') { return true; } 
+	for(int x = 0; x < 3; x++) {
+		for(int y = 0; y < 3; y++)
+			if(board[x][y] == '_') { return true; } 
 	}
 	return false; 
 }
@@ -75,23 +76,26 @@ bool isNotFull() {
 bool move(short int x, short int y, char spot) {
 	// This is a way to use an if statment without specifying an else statement. The if statment contains a 
 	// return so the function will exit. All other values, i.e. else, will return false. 
-	if(board[(y-1)][(x-1)] == '_') {
-		board[(y-1)][(x-1)] = spot;
-		return true;
+	if ((x >= 1 && x <= 3) && (y >= 1 && y <=3)) {
+		if(board[(y-1)][(x-1)] == '_') {
+			board[(y-1)][(x-1)] = spot;
+			return false;
+		}
 	}
-	return false; 
+	return true; 
 }
 
 // Reduces the board to a 9 letter string so it can be tested for a win
 string boardString() {
 	tmpBoard = ""; 
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++)
-			tmpBoard += board[i][j];
+	for(int x = 0; x < 3; x++) {
+		for(int y = 0; y < 3; y++)
+			tmpBoard += board[x][y];
 	}
 	return tmpBoard;
 }
 
+// Print Score
 void score() {
 	cout << "Score X: " << scoreX << endl;
 	cout << "Score O: " << scoreO << endl;
@@ -154,7 +158,7 @@ void printBoard()
 		//print each column
 		for(col=0; col<COL; col++)
 		{
-			cout<<"_"<<board[row][col]<<(col==(COL-1)? "_" : "_|");
+			cout<<" "<<board[row][col]<<(col==(COL-1)? " " : " |");
 		}
 		cout<<"\n         ";
 	}
@@ -163,38 +167,54 @@ void printBoard()
 	row=ROW-1;
 	cout<<row+1<<"  ";
 	for(col=0; col<COL; col++)
-		cout<<"_"<<board[row][col]<<(col==COL-1? "_" : "_|");
+		cout<<" "<<board[row][col]<<(col==COL-1? " " : " |");
+
+	cout << endl;
 }
 
 int main()
 {
-	//Welcome Message
+	// Welcome Message and Sample Board
 	cout << "Welcome to Tic Tac Toe." << endl;
-	cout << "Please pick your spots in grid format from the top-left corner." << endl;
-
-	//Print Array
+	cout << "Directions: Please pick your move in grid format from the top-left corner." << endl;
 	printBoard();
 
-	//Choose Spot
-	while (1) {
-		if(trade) {
-			cout << "\nPlayer 1, please choose a spot: ";
-			cin >> x >> y;
-			move(x, y, 'X');
-			trade = false;
-		}
-		else {
-			cout << "\nPlayer 2, please choose a spot: ";
-			cin >> x >> y;
-			move(x, y, 'O');
-			trade = true;
-		}
-		//Print Array
+	// Cycle Through the Players Turns
+	while (true) {
+
+		bool invalidMove = true;
+		do {
+			if(trade) {
+				cout << "\nPlayer 1, please choose a spot(ex. \"1 2\"): ";
+				cin >> x >> y;
+				invalidMove = move(x, y, 'X');
+				if(!invalidMove) 
+					trade = false;
+			}
+			else {
+				cout << "\nPlayer 2, please choose a spot(ex. \"1 2\"): ";
+				cin >> x >> y;
+				invalidMove = move(x, y, 'O');
+				if(!invalidMove) 
+					trade = true;
+			} 
+
+			if(invalidMove) {
+				cout << "Invalid Move. Try again." << endl;
+			}
+		} while(invalidMove);
+
+
+		// Print Board
 		printBoard();
-		//Check Win
+
+		// Check Win
 		if(isWin()) { 
-			// Print 
-			cout << "Starting next game." << endl;
+			// Check if Player Would Like to Play Again
+			cout << "Would you like to play again(y or n)? " << endl;
+			cin >> cont;
+			if(cont == 'n' || cont == 'N') 
+				return 0;
 
 			// Clear Board 
 			for(int x=0; x<3; x++) {
@@ -203,14 +223,12 @@ int main()
 				}
 			}
 
+			// Print Board
+			printBoard();
+
 			// Opposite Start Turns
 			startTrade = !startTrade;
 			trade = startTrade;
 		}
-	}
-
-	//Exit Program
-	cout << endl;
-	system("PAUSE");
-	return 0;
+	}	
 }
