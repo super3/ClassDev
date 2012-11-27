@@ -2,7 +2,7 @@
 # November 26, 2012
 
 # Valid Literals
-data = [ '3', '13.', '.328' '41.16', '+45.80' '+0', '-01', '-14.4',
+data = [ '3', '13.', '.328', '41.16', '+45.80' '+0', '-01', '-14.4',
 '1e12', '+1.4e6', '-2.e+7', '01E-06', '-.4E-7', '00e0']
 
 # Functions
@@ -28,51 +28,73 @@ class RegTester:
 	def check1(self):
 		# Check 1st Reg. Expression
 		if self.seek < self.litLen and reg1(self.lit[self.seek]):
-			print("1st Expression Passed.")
+			#print("1st Expression Passed.")
 			self.seek += 1
-		else:
-			return False
-		return True
-		self.checkEnd()
+			return True
+		return False
 	def check2(self):
 		# Check 2nd Reg. Expression and Needs to do at least
 		# one iteration
-		if self.seek <= self.litLen and reg2(self.lit[self.seek]):
+		if reg2(self.lit[self.seek]):
 			self.seek += 1
-			print("2nd Expression Passed.")
+			#print("2nd Expression Passed.")
 			while(self.seek < self.litLen):
 				if reg2(self.lit[self.seek]):
 					self.seek += 1
-					print("2nd Expression Passed.")
+					#print("2nd Expression Passed.")
 				else: 
 					break
 		else:
 			return False
 		return True
-		self.checkEnd()
 	def check3(self):
 		# Check 3nd Reg Expression
 		if self.seek < self.litLen and reg3(self.lit[self.seek]):
-			print("3rd Expression Passed.")
+			#print("3rd Expression Passed.")
 			self.seek += 1
-		else:
-			return False
-		return True
-		self.checkEnd()
+			return True
+		return False
 	def check4(self):
 		# Check 4th Reg Expression
 		if self.seek < self.litLen and reg4(self.lit[self.seek]):
-			print("4th Expression Passed.")
+			#print("4th Expression Passed.")
 			self.seek += 1
-		else:
-			return False
-		return True
-		self.checkEnd()
+			return True
+		return False
 	def checkEnd(self):
-		if self.seek >= self.litLen:
-			print("end")
+		#print(str(self.seek) + ":" + str(self.litLen))
+		return self.seek >= self.litLen
 	def run(self):
-		return self.check1() and self.check2() and self.check3() and self.check2() and self.check4() and self.check1() and self.check2()
+		flag = self.check1() 
+		if self.checkEnd():
+			return flag
 
-test = RegTester('+45.80')
-print(test.run())
+		flag = self.check2()
+		if self.checkEnd():
+			return flag
+
+		flag = self.check3()
+		if self.checkEnd():
+			return flag
+
+		flag = self.check2()
+		if self.checkEnd():
+			return flag
+
+		flag = self.check4()
+		if self.checkEnd():
+			return flag
+
+		flag = self.check1()
+		if self.checkEnd():
+			return flag
+
+		flag = self.check2()
+		if self.checkEnd():
+			return flag
+
+		return False			 
+
+for i in data:
+	test = RegTester(i)
+	print(i + " : " + str(test.run()))
