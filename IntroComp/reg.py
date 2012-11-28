@@ -5,7 +5,7 @@
 data = [ '3', '13.', '.328', '41.16', '+45.80' '+0', '-01', '-14.4',
 '1e12', '+1.4e6', '-2.e+7', '01E-06', '-.4E-7', '00e0']
 
-# Functions
+# Regular Expression Functions
 def reg1(char):
 	return char == '+' or char == '-' or reg2(char)
 
@@ -18,83 +18,78 @@ def reg3(char):
 def reg4(char):
 	return char == 'e' or char == 'E' or reg1(char)
 
-# Class
+# Regular Expression Tester Class
 class RegTester:
 	def __init__(self, lit):
+		"""
+		Data members:
+		lit -- The string to be tested
+		litLen -- The length of the tested string
+		seek -- Current tested character
+
+		Methods:
+		check1-check4 -- Tests regular expression, and then moves the seeker forward
+		checkEnd -- See if the seeker is at the end of the string
+		run -- Does expressions linearly (1232412)
+		"""
 		self.lit = lit
 		self.litLen = len(lit)
-		self.flag = False
 		self.seek = 0
 	def check1(self):
-		# Check 1st Reg. Expression
-		if self.seek < self.litLen and reg1(self.lit[self.seek]):
-			#print("1st Expression Passed.")
+		if reg1(self.lit[self.seek]):
 			self.seek += 1
 			return True
 		return False
 	def check2(self):
-		# Check 2nd Reg. Expression and Needs to do at least
-		# one iteration
 		if reg2(self.lit[self.seek]):
 			self.seek += 1
-			#print("2nd Expression Passed.")
 			while(self.seek < self.litLen):
 				if reg2(self.lit[self.seek]):
 					self.seek += 1
-					#print("2nd Expression Passed.")
 				else: 
 					break
 		else:
 			return False
 		return True
 	def check3(self):
-		# Check 3nd Reg Expression
-		if self.seek < self.litLen and reg3(self.lit[self.seek]):
-			#print("3rd Expression Passed.")
+		if reg3(self.lit[self.seek]):
 			self.seek += 1
 			return True
 		return False
 	def check4(self):
-		# Check 4th Reg Expression
-		if self.seek < self.litLen and reg4(self.lit[self.seek]):
-			#print("4th Expression Passed.")
+		if reg4(self.lit[self.seek]):
 			self.seek += 1
 			return True
 		return False
+
 	def checkEnd(self):
-		#print(str(self.seek) + ":" + str(self.litLen))
 		return self.seek >= self.litLen
+
 	def run(self):
-		flag = self.check1() 
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check1() 
 
-		flag = self.check2()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check2()
 
-		flag = self.check3()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check3()
 
-		flag = self.check2()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check2()
 
-		flag = self.check4()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check4()
 
-		flag = self.check1()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check1()
 
-		flag = self.check2()
-		if self.checkEnd():
-			return flag
+		if not self.checkEnd():
+			return self.check2()
 
 		return False			 
 
+# Unit Tests
 for i in data:
 	test = RegTester(i)
 	print(i + " : " + str(test.run()))
