@@ -1,5 +1,5 @@
 # Pixel Class
-class Pixel:
+class Color:
 	def __init__(self, r, g, b):
 		self.r = r
 		self.g = g
@@ -18,6 +18,7 @@ class Point:
 		# I = x + xd(yd − y − 1) + 1
 		return self.x + size_x * ( size_y - self.y - 1 ) - 1
 
+# Line Class
 class Line:
 	def __init__(self, x1, y1, x2, y2):
 		# Points
@@ -72,6 +73,21 @@ class Line:
 	def draw(self):
 		print(self.getPoints())
 
+# Image Class
+class Image:
+	def __init__(self, size_x, size_y, inten):
+		self.x = size_x
+		self.y = size_y
+		self.inten = inten
+		self.img = []
+	def fill(self, color):
+		for y in range(self.y):
+			for x in range(self.x):
+				self.img.append( color )
+	def blit(self, points):
+		for point in points:
+			self.img[ point.getIndex(self.x, self.y) ] = Color(0, 0 ,0)
+
 # PPM Creation Functions
 def header(x, y, inten):
 	"""Returns the header string for a PPM file."""
@@ -81,23 +97,17 @@ def header(x, y, inten):
 	head += str(inten) + "\n"
 	return head
 
-def makePPM(filename, x, y, inten, img):
+def makePPM(filename, img):
 	"""Write to a PPM file."""
 	f = open(filename, 'w+')
-	f.write(header(x, y, inten))
-	# write pixel image here
+	f.write(header(img.x, img.y, img.inten))
+	for pix in img.img:
+		f.write(str(pix))
 	f.close()
 
 # Unit Testing
 if __name__ == "__main__":
-	makePPM('test.ppm', 50, 50, 255, None)
-	# pix = Pixel(10,10,10)
-	# print(pix)
-	# pon = Point(10,10)
-	# print(pon)
-	lin = Line(2, 2, 6, 2)
-	lin.draw()
-	lin2 = Line(2, 2, 2, 4)
-	lin2.draw()
-	lin3 = Line(1, 1, 4, 3)
-	lin3.draw()
+	img = Image(320, 240, 255)
+	img.fill( Color(245, 245, 245) )
+	img.blit( [Point(50, 50)] )
+	makePPM('test.ppm', img)
