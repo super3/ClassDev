@@ -9,9 +9,10 @@ class Color:
 
 # Point Class
 class Point:
-	def __init__(self, x, y):
+	def __init__(self, x, y, color=Color(0,0,0)):
 		self.x = x
 		self.y = y
+		self.color = color
 	def __str__(self):
 		return "(%s,%s)" % (self.x,self.y)
 	def getIndex(self, size_x, size_y):
@@ -20,12 +21,13 @@ class Point:
 
 # Line Class
 class Line:
-	def __init__(self, x1, y1, x2, y2):
+	def __init__(self, x1, y1, x2, y2, color=Color(0,0,0)):
 		# Points
 		self.x1 = x1
 		self.x2 = x2
 		self.y1 = y1
 		self.y2 = y2
+		self.color = color
 
 	def getSlopeLong(self):
 		return (self.y2 - self.y1) / (self.x2 - self.x1)
@@ -55,7 +57,7 @@ class Line:
 			# (c) Round the y values to the nearest integer value
 			for x in x_vals:
 				y = (self.getSlopeLong() * x) + self.getIntercept()
-				solution.append( (x, round(y)) )
+				solution.append( Point(x, round(y), self.color) )
 
 		#3. If the y length is longer 
 		else:
@@ -67,15 +69,34 @@ class Line:
 			# (c) Round the x values to the nearest integer value
 			for y in y_vals:
 				x = self.getSlopeTall()*y - self.getSlopeTall()*self.y1 + self.x1
-				solution.append( (round(x), y) )
+				solution.append( Point(round(x), y, self.color) )
 
 		return solution
 	def draw(self):
 		print(self.getPoints())
 
+class Circle:
+	def __init__(self, x, y, r):
+		self.x = x 
+		self.y = y
+		self.r = r
+	def getPoints(self):
+		pass
+		# A simple circle algorithm is outlined in the following steps for a given center point (xc, yc) and radius r:
+		# 1. Initialize starting point to (r, 0): x = r and y = 0
+		# 2. Compute the next y location for the first octant: y + 1
+		# 3. Compute the corresponding x value (xa) for y + 1 using Equation 2.6
+		# 4. Round xa to the nearest integer value to find the next x-location
+		# 5. If x is greater than y, (Checking to see if points are still in first octant)
+		# (a) go back to step 2 
+		# 6. If x is less than or equal to y,
+		# (a) From the discovered points in the first octant, find the other points
+		# on the circle by symmetry as shown in Figure 2.6.
+		# 7. Add the center point (xc, yc) to all discovered points
+
 # Image Class
 class Image:
-	def __init__(self, size_x, size_y, inten):
+	def __init__(self, size_x, size_y, inten = 255):
 		self.x = size_x
 		self.y = size_y
 		self.inten = inten
@@ -86,7 +107,7 @@ class Image:
 				self.img.append( color )
 	def blit(self, points):
 		for point in points:
-			self.img[ point.getIndex(self.x, self.y) ] = Color(0, 0 ,0)
+			self.img[ point.getIndex(self.x, self.y) ] = point.color
 
 # PPM Creation Functions
 def header(x, y, inten):
@@ -107,7 +128,14 @@ def makePPM(filename, img):
 
 # Unit Testing
 if __name__ == "__main__":
-	img = Image(320, 240, 255)
+	# Create a Blank Image
+	img = Image(320, 240)
+	# Fill Image with Color
 	img.fill( Color(245, 245, 245) )
-	img.blit( [Point(50, 50)] )
+	# Create Line Objects
+	line1 = Line( 60, 120, 160, 120, Color(255, 0,0 ) )
+	line2 = Line( 160, 120, 160, 220, Color(0, 255, 0) )
+	# Blit and Create/Write Image
+	img.blit( line1.getPoints() )
+	img.blit( line2.getPoints() )
 	makePPM('test.ppm', img)
