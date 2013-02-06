@@ -40,7 +40,7 @@ class Line(Shape):
 			for x in x_vals:
 				y = (self.getSlopeLong() * x) + self.getIntercept()
 				solution.append( (x, round(y)) )
-
+			
 		#3. If the y length is longer 
 		else:
 			# (a) Find all the integer values from y1 to y2: [y1...y2]
