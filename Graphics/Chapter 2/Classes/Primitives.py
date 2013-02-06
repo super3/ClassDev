@@ -7,17 +7,21 @@ class Color:
 	def __str__(self):
 		return "%s %s %s " % (str(self.r), str(self.g), str(self.b))
 
-# Point Class
-class Point:
-	def __init__(self, x, y, color=Color(0,0,0)):
-		self.x = x
-		self.y = y
-		self.color = color
+# Shape Class
+class Shape(object):
+	def __init__(self, color=Color(0,0,0)):
+		"""Base class for Geometric Primitives."""
+		self.color = color # color obj
+		self.points = self.draw()
 	def __str__(self):
-		return "(%s,%s)" % (self.x,self.y)
-	def getIndex(self, size_x, size_y):
-		# I = x + xd(yd − y − 1) + 1
-		return self.x + size_x * ( size_y - self.y - 1 ) - 1
+		"""Returns a string containing all the points in the shape."""
+		output = ""
+		for a_point in self.points:
+			output += str(a_point) + ", "
+		return output
+	def draw(self):
+		"""Calculates a shape's points, and stores it."""
+		raise NotImplementedError
 
 # Image Class
 class Image:
@@ -30,9 +34,12 @@ class Image:
 		for y in range(self.y):
 			for x in range(self.x):
 				self.img.append( color )
-	def blit(self, points):
-		for point in points:
-			self.img[ point.getIndex(self.x, self.y) ] = point.color
+	def getIndex(self, x, y):
+		# I = x + xd(yd − y − 1) + 1
+		return x + self.x * ( self.y - y - 1 ) - 1
+	def blit(self, shapeObj):
+		for point in shapeObj.points:
+			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.color
 
 # PPM Function
 def makePPM(filename, img):
