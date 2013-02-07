@@ -1,6 +1,8 @@
 # Imports
 import math
+import operator
 from Primitives import *
+from Line import Line
 
 # Ellipse Class
 class Ellipse(Shape):
@@ -62,7 +64,20 @@ class Ellipse(Shape):
 			# the ellipse by symmetry as shown in Figure 2.8.
 			# 5. Add the center point (xc, yc) to all discovered points
 		solution = self.sym(solution)
-		return self.center(solution)
+		solution = self.center(solution)
+		solution = self.remove_duplicates(solution)
+		return solution
+
+	def fill(self):
+		# Find the absolute boundaries of the primitive
+		min_y = min(y[1] for y in self.points)
+		max_y = max(y[1] for y in self.points)
+		# For each row of the primitive, find the boundary pixels
+		for row in range( min_y, max_y ):
+			bound_min = min((y for y in self.points if y[1]==row), key=operator.itemgetter(0))
+			bound_max = max((y for y in self.points if y[1]==row), key=operator.itemgetter(0))
+			# For each row, fill in the pixels between boundary pixels
+			self.points.extend( Line(bound_min[0], bound_min[1], bound_max[0], bound_max[1]).draw() )
 
 # Unit Testing
 if __name__ == "__main__":
@@ -72,6 +87,7 @@ if __name__ == "__main__":
 	img.fill( Color(245, 245, 245) )
 	# Create Ellipse Object
 	ellipse1 = Ellipse( 160, 120, 50, 100, Color(0,0,0) )
+	ellipse1.fill()
 	# Blit and Create/Write Image
 	img.blit( ellipse1 )
 	makePPM('test.ppm', img)

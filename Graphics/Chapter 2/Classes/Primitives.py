@@ -19,6 +19,8 @@ class Shape(object):
 		for a_point in self.points:
 			output += str(a_point) + ", "
 		return output
+	def remove_duplicates(self, points):
+		return list(set(points))
 	def draw(self):
 		"""Calculates a shape's points, and stores it."""
 		raise NotImplementedError
