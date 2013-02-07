@@ -1,0 +1,25 @@
+? program       YES
+? operation     YES
+? CSC415        NO
++ Organization  ADDED
++ programming   ADDED
++ read          DUPLICATE
+- program       DELETED
+- which         DELETED
+- language      SKIP - NOT EXIST
+*
+write
+a
+to
+read
+in
+file
+of
+strings
+and
+another
+operation
+consists
+following
+Organization
+programming
