@@ -33,7 +33,7 @@ class Line(Shape):
 		if x_len > y_len:
 			# (a) Find all the integer values from x1 to x2: [x1...x2]
 			x_vals = []
-			for x in range(self.x1, self.x2+1):
+			for x in range(min(self.x1,self.x2+1), max(self.x1,self.x2+1)):
 				x_vals.append(x)
 			# (b) Solve for the corresponding y values using Equation 2.1: [y1...y2]
 			# (c) Round the y values to the nearest integer value
@@ -45,7 +45,7 @@ class Line(Shape):
 		else:
 			# (a) Find all the integer values from y1 to y2: [y1...y2]
 			y_vals = []
-			for y in range(self.y1, self.y2+1):
+			for y in range(min(self.y1,self.y2+1), max(self.y1,self.y2+1)):
 				y_vals.append(y)
 			# (b) Solve for the corresponding x values using Equation 2.4: [x1...x2]
 			# (c) Round the x values to the nearest integer value

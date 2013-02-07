@@ -24,8 +24,8 @@ class Polygon(Shape):
 			print( Line(x1, y1, x2, y2).draw() )
 			solution.extend( Line(x1, y1, x2, y2).draw() )
 		# 2. Use the line algorithm in section 2.1 to draw a line between the last point in the list and the first point
-		x1 = self.point_list[i][0]
-		y1 = self.point_list[i][1]
+		x1 = self.point_list[0][0]
+		y1 = self.point_list[0][1]
 		x2 = self.point_list[len(self.point_list)-1][0]
 		y2 = self.point_list[len(self.point_list)-1][1]
 		solution.extend( Line(x1, y1, x2, y2).draw() )
