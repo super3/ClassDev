@@ -12,7 +12,7 @@ class FileOp:
 		self.op_table = self.in_file(op_file)
 
 	def in_file(self, filename):
-		"""Read a file into a table."""
+		"""Read a file into a list."""
 		table = []
 		for line in open(filename, 'r'):
 			if line == ":":
@@ -21,6 +21,7 @@ class FileOp:
 		return table
 
 	def out_file(self, filename, txt):
+		"""Write to a file from string."""
 		f = open(filename, 'w+')
 		f.write(txt)
 		f.close()
@@ -42,18 +43,21 @@ class FileOp:
 			return "SKIP - NOT EXIST"
 
 	def check_op(self, word):
+		"""Check if a word is in the list."""
 		if self.check(word):
 			return "YES"
 		else:
 			return "NO"
 
 	def check(self, word):
+		"""Check if a word is in the list."""
 		for item in self.table:
 			if word == item:
 				return True
 		return False
 
 	def print_op(self):
+		"""Print all the words in a list."""
 		output = ""
 		for item in self.table:
 			output += item
