@@ -27,6 +27,7 @@ Parent class to all geometric primitives.
 #### Vars
 * color (`color Class`) - Contains the RGB draw color for the shape.
 * points (`tuples List`) - Contains all the draw points for the shape.
+
 #### Methods
 * \_\_str\_\_ (returns `String`) - Prints out all draw points for the shape. Primarily for debugging.
 * remove_duplicates (return `tuples List`) - Removes all duplicate points for a passed list.
