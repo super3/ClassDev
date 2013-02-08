@@ -21,7 +21,8 @@ Contains all the geometric primitives for the 2D part of the engine. All the geo
 * Circle
 * Polygon
 
-### Abtract Class: Shape
+Abtract Class: Shape
+---
 Parent class to all geometric primitives. 
 
 #### Vars
