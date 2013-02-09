@@ -39,24 +39,28 @@ class Polygon(Shape):
 
 	 	"""
 	 	# Find the absolute boundaries of the primitive
-		min_y = min(y[1] for y in self.points)
-		max_y = max(y[1] for y in self.points)
+		min_y = min(y[1] for y in self.point_list)
+		max_y = max(y[1] for y in self.point_list)
 
-		for scan_line in range(min_y, max_y):
-			pass
-		# 1. If y2 − y1	= 0,
-		# (a) This is a horizontal line, so there is not an intersection
-		# 2. If y2 − y1	=/= 0
-		# (a) If a is not in the range from y1 to y2
-		# i. The scan line is outside of the edge, so there is not an intersection
-		# (b) Find the y-value of the maximal vertex point
-		# i. if y1 ≥ y2, y-maximal = y1
-		# ii. if y1	< y2, y-maximal = y2
-		# (c) If a = y-maximal
-		# i. The scan line intersects a maximal vertex-point, so there is not an intersection
-		# (d) If a 6 = y-maximal and is in the range from y1 to y2
-		#i. Find the x-value of the intersect for y = a using Equation 2.4
-		#ii. Round the x-value to the nearest integer
+		for i in range(self.point_list-1):
+			y1 = self.point_list[i][1]
+			y2 = self.point_list[i+1][1]
+			# 1. If y2 − y1	= 0,
+			if y2 - y1 == 0:
+				# (a) This is a horizontal line, so there is not an intersection
+				pass
+			else:
+				# 2. If y2 − y1	=/= 0
+				# (a) If a is not in the range from y1 to y2
+			#	 i. The scan line is outside of the edge, so there is not an intersection
+				# (b) Find the y-value of the maximal vertex point
+				# i. if y1 ≥ y2, y-maximal = y1
+				# ii. if y1	< y2, y-maximal = y2
+				# (c) If a = y-maximal
+				# i. The scan line intersects a maximal vertex-point, so there is not an intersection
+				# (d) If a 6 = y-maximal and is in the range from y1 to y2
+				#i. Find the x-value of the intersect for y = a using Equation 2.4
+				#ii. Round the x-value to the nearest integer
 
 	def fill(self):
 		# Find the absolute boundaries of the primitive

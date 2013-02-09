@@ -9,6 +9,18 @@ Operations
 * `-` Remove a string fro the list.
 * `*` Print all strings one-by-one.
 
+FileOp Class
+---
+* constructor (path_to_initial_file, path_to_operation_file)
+* in_file (path_to_file)
+* out_file (path_to_file)
+* print_op (word)
+* add_op (word)
+* remove_op (word)
+* check_op (word)
+* check (word)
+* run (path_to_results_file)
+
 Algorithm 
 ---
 1. Initialize FileOp object. Pass initial and operation file.
@@ -34,7 +46,7 @@ Algorithm
 5. Run method saves output_string to the result file. Supported by a function to save a string to a text file.
 
         FileOp.out_file(outfile, output)
-       
-Unit Testing
+
+Testing
 ---
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis gravida quam sed sagittis. Aliquam rutrum ullamcorper porttitor. Fusce semper tellus non leo commodo facilisis. Mauris vestibulum tortor elementum neque vestibulum convallis. Morbi tincidunt feugiat vehicula. Duis faucibus arcu at erat lacinia eu mollis odio varius. Vivamus cursus gravida dui, in consequat libero cursus vitae. 
+Initial testing is done with the provided assignment operation file in the root directory. Additional operation files, and unit tests are placed in the __Tests__ folder. 
