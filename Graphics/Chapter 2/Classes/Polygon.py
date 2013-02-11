@@ -98,11 +98,8 @@ class Polygon(Shape):
 			# A. Sort intersections from minimal to maximal value based on
 			# the x values of the intersection points
 			# B. Fill in pixels between adjacent pairs of intersection points
-			#print(solution)
-			#return solution
 			pairs = []
-			for i in range(len(solution)-1):
-				
+			for i in range(0, len(solution)-1, 2):
 				pairs.extend( Line(solution[i][0], solution[i][1], solution[i+1][0], solution[i+1][1]).draw() )
 			# 3. Use the polygon algorithm in section 2.4 to fill in the border pixels of
 			# the polygon	
@@ -122,5 +119,3 @@ if __name__ == "__main__":
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
-	# verts = [(10,10), (20,30)]
-	# print( polygon1.scan_line(verts, 1) )
