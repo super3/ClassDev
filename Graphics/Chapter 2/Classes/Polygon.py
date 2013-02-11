@@ -32,10 +32,10 @@ class Polygon(Shape):
 		y2 = self.point_list[len(self.point_list)-1][1]
 		solution.extend( Line(x1, y1, x2, y2).draw() )
 		solution = self.remove_duplicates(solution)
-		#solution.extend( self.fill() )
+		solution.extend( self.fill() )
 		return solution
 
-	def scan_line(self, point_list, a):
+	def scan_line(self, a):
 		"""
 		A simple scan-line intersection algorithm to compute the intersection
 	 	of a scan line y = a and an edge – with vertex points (x1, y1) and (x2, y2)
@@ -44,11 +44,11 @@ class Polygon(Shape):
 		"""
 		solution = []
 
-		for i in range(len(point_list)-1):
-			x1 = point_list[i][0]
-			y1 = point_list[i][1]
-			x2 = point_list[i+1][0]
-			y2 = point_list[i+1][1]
+		for i in range(len(self.point_list)-1):
+			x1 = self.point_list[i][0]
+			y1 = self.point_list[i][1]
+			x2 = self.point_list[i+1][0]
+			y2 = self.point_list[i+1][1]
 			# 1. If y2 − y1	= 0,
 			if y2 - y1 == 0:
 				# (a) This is a horizontal line, so there is not an intersection
@@ -56,7 +56,7 @@ class Polygon(Shape):
 			# 2. If y2 − y1	=/= 0
 			else:
 				# (a) If a is not in the range from y1 to y2
-				if not (min(y1,y2) >= a and max(y1,y2) <= a):
+				if not (min(y1,y2) <= a and max(y1,y2) >= a):
 					continue 
 			 	# i. The scan line is outside of the edge, so there is not an intersection
 				
@@ -72,6 +72,7 @@ class Polygon(Shape):
 					#i. Find the x-value of the intersect for y = a using Equation 2.4
 					x_val = self.getSlope(x1, y1, x2, y2)*a - self.getSlope(x1, y1, x2, y2)*y1 + x1
 					#ii. Round the x-value to the nearest integer
+					#print(x_val)
 					solution.append( (round(x_val), a) )
 
 		return solution
@@ -93,8 +94,10 @@ class Polygon(Shape):
 		if len(solution) > 0:
 			# A. Sort intersections from minimal to maximal value based on
 			# the x values of the intersection points
-			solution.sort( key=operator.itemgetter(0) )
+			solution.sort( key=operator.itemgetter(1) )
 			# B. Fill in pixels between adjacent pairs of intersection points
+			#print(solution)
+			#return solution
 			pairs = []
 			for i in range(len(solution)-1):
 				pairs.extend( Line(solution[i][0], solution[i][1], solution[i+1][0], solution[i+1][1]).draw() )
@@ -116,6 +119,5 @@ if __name__ == "__main__":
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
-
-	verts = [(10,10), (20,30)]
-	print( polygon1.scan_line(verts, 15) )
+	# verts = [(10,10), (20,30)]
+	# print( polygon1.scan_line(verts, 1) )
