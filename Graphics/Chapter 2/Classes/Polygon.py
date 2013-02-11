@@ -32,7 +32,6 @@ class Polygon(Shape):
 		y2 = self.point_list[len(self.point_list)-1][1]
 		solution.extend( Line(x1, y1, x2, y2).draw() )
 		solution = self.remove_duplicates(solution)
-		solution.extend( self.fill() )
 		return solution
 
 	def scan_line(self, a):
@@ -88,22 +87,26 @@ class Polygon(Shape):
 		# (a) For each edge
 		# i. Use the scan-line intersection algorithm to find intersec-tions
 		for a in range(min_y, max_y):
-			solution.extend( self.scan_line(a) )
+			tmp = self.scan_line(a)
+			tmp.sort( key=operator.itemgetter(0) )
+			print(tmp)
+			if len(tmp) > 0:
+				solution.extend( tmp )
 
 		# ii. If there are intersections
 		if len(solution) > 0:
 			# A. Sort intersections from minimal to maximal value based on
 			# the x values of the intersection points
-			solution.sort( key=operator.itemgetter(1) )
 			# B. Fill in pixels between adjacent pairs of intersection points
 			#print(solution)
 			#return solution
 			pairs = []
 			for i in range(len(solution)-1):
+				
 				pairs.extend( Line(solution[i][0], solution[i][1], solution[i+1][0], solution[i+1][1]).draw() )
 			# 3. Use the polygon algorithm in section 2.4 to fill in the border pixels of
 			# the polygon	
-			return pairs
+			self.points.extend( pairs )
 		
 
 # Unit Testing
@@ -115,7 +118,7 @@ if __name__ == "__main__":
 	# Create Polygon
 	point_list = [ (60,120), (110,200), (110,150), (200,220), (160,120) ]
 	polygon1 = Polygon( point_list, Color(255,0,255) )
-	#polygon1.fill()
+	polygon1.fill()
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
