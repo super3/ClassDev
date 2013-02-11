@@ -11,8 +11,10 @@ class Color:
 class Shape(object):
 	def __init__(self, color=Color(0,0,0)):
 		"""Base class for Geometric Primitives."""
-		self.color = color # color obj
-		self.points = self.draw()
+		self.border_color = color
+		self.inside_color = color
+		self.border = self.draw_border()
+		self.inside = []
 	def __str__(self):
 		"""Returns a string containing all the points in the shape."""
 		output = ""
@@ -40,8 +42,10 @@ class Image:
 		# I = x + xd(yd − y − 1) + 1
 		return x + self.x * ( self.y - y - 1 ) - 1
 	def blit(self, shapeObj):
-		for point in shapeObj.points:
-			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.color
+		for point in shapeObj.inside:
+			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.inside_color
+		for point in shapeObj.border:
+			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.border_color
 
 # PPM Function
 def makePPM(filename, img):

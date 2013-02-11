@@ -14,7 +14,10 @@ class Polygon(Shape):
 	def getSlope(self, x1, y1, x2, y2):
 		return (x2 - x1) / (y2 - y1)
 
-	def draw(self):
+	def eq24(self, x1, y1, x2, y2, y):
+		return self.getSlope(x1, y1, x2, y2)*y - self.getSlope(x1, y1, x2, y2)*y1 + x1
+
+	def draw_border(self):
 		# A simple polygon algorithm is outlined in the following steps for n vertex
 		# points [(x1, y1), (x2, y2), ..., (xn, yn)], listed in the order to be connected:
 		solution = []
@@ -38,84 +41,75 @@ class Polygon(Shape):
 		"""
 		A simple scan-line intersection algorithm to compute the intersection
 	 	of a scan line y = a and an edge – with vertex points (x1, y1) and (x2, y2)
-	 	– is outlined in the following steps:
+	 	from the polygon's list of vertex points.
 
 		"""
 		solution = []
 
 		for i in range(len(self.point_list)-1):
+
+			# Two vertex points to local vars
 			x1 = self.point_list[i][0]
 			y1 = self.point_list[i][1]
 			x2 = self.point_list[i+1][0]
 			y2 = self.point_list[i+1][1]
-			# 1. If y2 − y1	= 0,
-			if y2 - y1 == 0:
-				# (a) This is a horizontal line, so there is not an intersection
-				continue
-			# 2. If y2 − y1	=/= 0
+			
+			# This is a horizontal line, so there is not an intersection
+			if y2 - y1 == 0: continue
 			else:
-				# (a) If a is not in the range from y1 to y2
-				if not (min(y1,y2) <= a and max(y1,y2) >= a):
-					continue 
-			 	# i. The scan line is outside of the edge, so there is not an intersection
+				# The scan line is outside of the edge, so there is not an intersection
+				if not (min(y1,y2) <= a and max(y1,y2) >= a): continue 
 				
-				# (b) Find the y-value of the maximal vertex point
+				# Find the y-value of the maximal vertex point
 				y_max = max(y1,y2)
 				
-				# (c) If a = y-maximal
-				# i. The scan line intersects a maximal vertex-point, so there is not an intersection
-				if a == y_max:
-					continue
-				# (d) If a =/= y-maximal and is in the range from y1 to y2
+				# The scan line intersects a maximal vertex-point, so there is not an intersection
+				if a == y_max: continue
 				else:
-					#i. Find the x-value of the intersect for y = a using Equation 2.4
-					x_val = self.getSlope(x1, y1, x2, y2)*a - self.getSlope(x1, y1, x2, y2)*y1 + x1
-					#ii. Round the x-value to the nearest integer
-					#print(x_val)
-					solution.append( (round(x_val), a) )
+					# Find the x-value of the intersect for y = a using Equation 2.4
+					x_val = round(self.eq24(x1, y1, x2, y2, a))
+					solution.append( (x_val, a) )
 
 		return solution
 
-	def fill(self):
+	def draw_inside(self):
+		point_pairs = []
 		solution = []
 
-		# 1. Find the min y-value (ymin) and the max y-value (ymax)
+		# Find the min y-value (ymin) and the max y-value (ymax)
 		min_y = min(y[1] for y in self.point_list)
 		max_y = max(y[1] for y in self.point_list)
-		# 2. For all the scan lines from ymin to ymax (integers values only)
 
-		# (a) For each edge
-		# i. Use the scan-line intersection algorithm to find intersec-tions
+		# Use the scan-line intersection algorithm to find intersections
 		for a in range(min_y, max_y):
 			tmp = self.scan_line(a)
-			tmp.sort( key=operator.itemgetter(0) )
-			print(tmp)
-			if len(tmp) > 0:
-				solution.extend( tmp )
+			# sort intersections from minimal to maximal value based o nthe x values
+			tmp.sort( key=operator.itemgetter(0) ) 
+			if len(tmp) > 0: point_pairs.extend( tmp )
 
-		# ii. If there are intersections
-		if len(solution) > 0:
-			# A. Sort intersections from minimal to maximal value based on
-			# the x values of the intersection points
-			# B. Fill in pixels between adjacent pairs of intersection points
-			pairs = []
-			for i in range(0, len(solution)-1, 2):
-				pairs.extend( Line(solution[i][0], solution[i][1], solution[i+1][0], solution[i+1][1]).draw() )
-			# 3. Use the polygon algorithm in section 2.4 to fill in the border pixels of
-			# the polygon	
-			self.points.extend( pairs )
-		
+		# If there are intersections
+		if len(point_pairs) > 0:
+			# Fill in pixels between adjacent pairs of intersection points
+			for i in range(0, len(point_pairs)-1, 2):
+				solution.extend( Line(point_pairs[i][0], point_pairs[i][1], point_pairs[i+1][0], point_pairs[i+1][1]).draw() )	
+
+		return solution
+
+	def fill(self, color = None):
+		self.inside = self.draw_inside()
+		if color == None: self.inside_color = self.border_color
+		else: self.inside_color = color
 
 # Unit Testing
 if __name__ == "__main__":
 	# Create Blank Image
-	img = Image(320, 240)
+	img = Image(150, 350)
 	# Fill Image with Color
 	img.fill( Color(245, 245, 245) )
 	# Create Polygon
-	point_list = [ (60,120), (110,200), (110,150), (200,220), (160,120) ]
-	polygon1 = Polygon( point_list, Color(255,0,255) )
-	polygon1.fill()
+	point_list = [ (10, 10), (100, 10), (100, 300), (10, 150), (80, 150), (80, 50), (20, 50), (20, 100), (10, 100) ]
+	polygon1 = Polygon( point_list, Color(0,0,0) )
+	polygon1.fill( Color(255,0,255) )
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
