@@ -11,15 +11,25 @@ Operations
 
 FileOp Class
 ---
+__Private Varibles__
+
+* `string array` table
+* `string array` table_op
+
+__Public Methods__
+
 * constructor (path_to_initial_file, path_to_operation_file)
-* in_file (path_to_file)
-* out_file (path_to_file)
-* print_op (word)
-* add_op (word)
-* remove_op (word)
-* check_op (word)
-* check (word)
-* run (path_to_results_file)
+* `void` run (path_to_results_file)
+
+__Private Methods__
+
+* `string` in_file (path_to_file)
+* `string` out_file (path_to_file)
+* `string` print_op (word)
+* `string` add_op (word)
+* `string` remove_op (word)
+* `string` check_op (word)
+* `bool` check (word)
 
 Algorithm 
 ---
@@ -30,7 +40,7 @@ Algorithm
 2. Constructor loads in the initial and operation text files into a list structure, and sets both to internal object data. Supported by a function to load the text file into the list structure.
     
         FileOp.table = FileOp.in_file(path_to_initial_file)
-		FileOp.op_table = FileOp.in_file(path_to_operation_file)
+    	FileOp.op_table = FileOp.in_file(path_to_operation_file)
 
 3. Perform run method on FileOp object. Pass output file.
 
