@@ -21,6 +21,11 @@ class Shape(object):
 		for a_point in self.points:
 			output += str(a_point) + ", "
 		return output
+
+	def draw(self):
+		"""Calculates a shape's points, and stores it."""
+		raise NotImplementedError
+
 	def remove_duplicates(self, points):
 		"""Removes duplicates from a list by converting it to a set then back to a list."""
 		return list(set(points))
@@ -40,11 +45,11 @@ class Shape(object):
 		# Save Translated Data
 		self.border = tmp_border
 		self.inside = tmp_inside
+
 	def rotate(self, x, y, angle):
 		raise NotImplementedError
-
-	def draw(self):
-		"""Calculates a shape's points, and stores it."""
+		
+	def scale(self, x, y, factor):
 		raise NotImplementedError
 
 # Image Class

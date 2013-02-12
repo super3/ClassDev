@@ -95,6 +95,12 @@ class Polygon(Shape):
 
 		return solution
 
+	def scale(self, x, y, factor):
+		pass
+
+	def rotate(self, x, y, angle):
+		pass
+
 	def fill(self, color = None):
 		self.inside = self.draw_inside()
 		if color == None: self.inside_color = self.border_color
@@ -103,13 +109,18 @@ class Polygon(Shape):
 # Unit Testing
 if __name__ == "__main__":
 	# Create Blank Image
-	img = Image(150, 350)
+	img = Image(320, 240)
 	# Fill Image with Color
 	img.fill( Color(245, 245, 245) )
 	# Create Polygon
-	point_list = [ (10, 10), (100, 10), (100, 300), (10, 150), (80, 150), (80, 50), (20, 50), (20, 100), (10, 100) ]
-	polygon1 = Polygon( point_list, Color(0,0,0) )
-	polygon1.fill( Color(255,0,255) )
+	point_list = [ (60,120), (110, 200), (110, 150), (200, 220), (160, 120) ]
+	polygon1 = Polygon( point_list, Color(255,0,255) )
+	# Translate/Move
+	polygon1.move( 50, -30 )
+	# Scale
+	polygon1.scale( 160, 120, 1.5 )
+	# Rotate
+	polygon1.rotate( 160, 120, -80 )
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
