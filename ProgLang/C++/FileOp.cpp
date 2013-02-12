@@ -19,10 +19,25 @@ void FileOp::in_file(string path)
 	// Open File
 	ifstream myfile(path);
 	// Get Number of Lines
-	int numLines = 0;
+	int num_lines = 0;
 	while ( getline(myfile, string()) )
-	   ++numLines;
-	cout << numLines << endl;
+	   ++num_lines;
+	cout << num_lines << endl;
+	// Make Space in Vector
+	FileOp::table.reserve(num_lines);
+
+	string output;
+
+	// Put Into Vector
+	if (myfile.is_open()) {
+		while (!myfile.eof()) {
+			myfile >> output;
+			FileOp::table.push_back(output);
+			cout<<output;
+		}
+	}
+
+
 }
 
 void FileOp::out_file(string path)

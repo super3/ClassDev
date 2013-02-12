@@ -46,13 +46,13 @@ class Polygon(Shape):
 		"""
 		solution = []
 
-		for i in range(len(self.point_list)-1):
+		for i in range(len(self.point_list)):
 
 			# Two vertex points to local vars
 			x1 = self.point_list[i][0]
 			y1 = self.point_list[i][1]
-			x2 = self.point_list[i+1][0]
-			y2 = self.point_list[i+1][1]
+			x2 = self.point_list[(i+1)%len(self.point_list)][0]
+			y2 = self.point_list[(i+1)%len(self.point_list)][1]
 			
 			# This is a horizontal line, so there is not an intersection
 			if y2 - y1 == 0: continue
@@ -83,9 +83,12 @@ class Polygon(Shape):
 		# Use the scan-line intersection algorithm to find intersections
 		for a in range(min_y, max_y):
 			tmp = self.scan_line(a)
-			# sort intersections from minimal to maximal value based o nthe x values
+			# sort intersections from minimal to maximal value based on the x values
+			print(tmp)
 			tmp.sort( key=operator.itemgetter(0) ) 
-			if len(tmp) > 0: point_pairs.extend( tmp )
+			if len(tmp) > 0: 
+				point_pairs.extend( tmp ) 
+				print(tmp)
 
 		# If there are intersections
 		if len(point_pairs) > 0:
@@ -113,3 +116,5 @@ if __name__ == "__main__":
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
+
+	

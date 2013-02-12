@@ -5,6 +5,7 @@
 // License: GPLv3 <http://gplv3.fsf.org/>
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class FileOp {
@@ -12,8 +13,8 @@ class FileOp {
 		FileOp(string, string);
 		void run(string);
 	private:
-		string table[50];
-		string table_op[50];
+		vector<string> table;
+		vector<string> table_op;
 
 		void in_file(string);
 		void out_file(string);

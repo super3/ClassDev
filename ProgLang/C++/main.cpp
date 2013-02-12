@@ -11,7 +11,7 @@ using namespace std;
 int main() {
 	// Start Object
 	FileOp test = FileOp("test", "test");
-	test.run("C:\\Users\\super_000\\Code\\ClassDev\\ProgLang\\C++\\Debug\\initial_file.txt");
+	test.run("C:\\Users\\super_000\\Code\\ClassDev\\ProgLang\\Python\\initial_file.txt");
 	
 	// Exit Program
 	system("PAUSE");
