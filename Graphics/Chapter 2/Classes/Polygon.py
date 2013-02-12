@@ -84,11 +84,8 @@ class Polygon(Shape):
 		for a in range(min_y, max_y):
 			tmp = self.scan_line(a)
 			# sort intersections from minimal to maximal value based on the x values
-			print(tmp)
 			tmp.sort( key=operator.itemgetter(0) ) 
-			if len(tmp) > 0: 
-				point_pairs.extend( tmp ) 
-				print(tmp)
+			if len(tmp) > 0: point_pairs.extend( tmp ) 
 
 		# If there are intersections
 		if len(point_pairs) > 0:
