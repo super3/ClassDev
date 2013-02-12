@@ -57,7 +57,7 @@ class Line(Shape):
 
 # Unit Test
 if __name__ == "__main__":
-	# Pr a Blank Image
+	# Create a Blank Image
 	img = Image(320, 240)
 	# Fill Image with Color
 	img.fill( Color(245, 245, 245) )
