@@ -9,12 +9,14 @@ class Color:
 
 # Shape Class
 class Shape(object):
+	# Magic Functions
 	def __init__(self, color=Color(0,0,0)):
 		"""Base class for Geometric Primitives."""
 		self.border_color = color
 		self.inside_color = color
-		self.border = self.draw_border()
+		self.border = []
 		self.inside = []
+		self.do_fill = False
 	def __str__(self):
 		"""Returns a string containing all the points in the shape."""
 		output = ""
@@ -22,15 +24,30 @@ class Shape(object):
 			output += str(a_point) + ", "
 		return output
 
+	# Drawing Functions
 	def draw(self):
 		"""Calculates a shape's points, and stores it."""
+		self.border = self.draw_border()
+		if self.do_fill: self.inside = self.draw_inside()
+	def draw_border(self):
+		"""Calculates a shape's border points."""
 		raise NotImplementedError
+	def draw_inside(self):
+		"""Calculates a shapes's inside points (or fill)."""
+		raise NotImplementedError
+	def fill(self, color = None):
+		self.do_fill = True
+		if color == None: self.inside_color = self.border_color
+		else: self.inside_color = color
 
+	# Cleanup Function
 	def remove_duplicates(self, points):
 		"""Removes duplicates from a list by converting it to a set then back to a list."""
 		return list(set(points))
+	
+	# Transformations
 	def move(self, x, y):
-		"""Translate a shape."""
+		"""Translate any shape."""
 
 		# Temp Vars
 		tmp_border = []
@@ -46,9 +63,10 @@ class Shape(object):
 		self.border = tmp_border
 		self.inside = tmp_inside
 
+	def translate(self, x, y):
+		raise NotImplementedError
 	def rotate(self, x, y, angle):
 		raise NotImplementedError
-		
 	def scale(self, x, y, factor):
 		raise NotImplementedError
 
@@ -67,6 +85,9 @@ class Image:
 		# I = x + xd(yd − y − 1) + 1
 		return x + self.x * ( self.y - y - 1 ) - 1
 	def blit(self, shapeObj):
+		# Calculate Object's Points
+		shapeObj.draw()
+		# Draw Object on Image
 		for point in shapeObj.inside:
 			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.inside_color
 		for point in shapeObj.border:

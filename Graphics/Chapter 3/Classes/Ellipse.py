@@ -6,6 +6,7 @@ from Line import Line
 
 # Ellipse Class
 class Ellipse(Shape):
+	# Constructor
 	def __init__(self, x, y, a, b, color=Color(0,0,0)):
 		# Private Vars
 		self.x = x
@@ -15,13 +16,14 @@ class Ellipse(Shape):
 		# Color and Points
 		super(Ellipse, self).__init__(color)
 
+	# Ellipse Functions
 	def sym(self, points):
 		"""Uses symmetry to find the other parts of the ellipse."""
 		new_points = []
 		for point in points:
-			new_points.append( (point[0], point[1])   )
+			new_points.append( ( point[0], point[1])  )
 			new_points.append( (-point[0], point[1])  )
-			new_points.append( (point[0], -point[1])  )
+			new_points.append( ( point[0], -point[1]) )
 			new_points.append( (-point[0], -point[1]) )
 		return new_points
 
@@ -32,6 +34,7 @@ class Ellipse(Shape):
 			new_points.append( (point[0]+self.x, point[1]+self.y) )
 		return new_points
 
+	# Draw Functions
 	def draw_border(self):
 		solution = []
 
@@ -64,12 +67,11 @@ class Ellipse(Shape):
 		
 		return solution
 
-	#def draw_inside()
-
 	def draw_inside(self):
 		solution = []
 
 		# Find the absolute boundaries of the primitive
+		self.border = self.draw_border()
 		min_y = min(y[1] for y in self.border)
 		max_y = max(y[1] for y in self.border)
 		# For each row of the primitive, find the boundary pixels
@@ -81,10 +83,22 @@ class Ellipse(Shape):
 
 		return solution
 
-	def fill(self, color = None):
-		self.inside = self.draw_inside()
-		if color == None: self.inside_color = self.border_color
-		else: self.inside_color = color
+	# Transformations
+	def translate(self, x, y):
+		self.x += x
+		self.y += y
+
+	def rotate(self, x, y, angle):
+		# One possible way this could work is forming a line from the center of the ellipse
+		# to one of the border points. Then you apply your standard line rotation with the
+		# center point being the rotation point. Unfortunately, you literally have to do this
+		# for every single border point. 
+		raise NotImplementedError
+
+	def scale(self, x, y, factor):
+		# This only scales on the center point.
+		self.a *= factor
+		self.b *= factor
 
 # Unit Testing
 if __name__ == "__main__":

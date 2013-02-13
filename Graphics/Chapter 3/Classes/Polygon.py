@@ -5,18 +5,20 @@ from Line import Line
 
 # Polygon Class
 class Polygon(Shape):
+	# Constructor
 	def __init__(self, point_list, color=Color(0,0,0)):
 		# Private Vars
 		self.point_list = point_list
 		# Color and Points
 		super(Polygon, self).__init__(color)
 
+	# Equations
 	def getSlope(self, x1, y1, x2, y2):
 		return (x2 - x1) / (y2 - y1)
-
 	def eq24(self, x1, y1, x2, y2, y):
 		return self.getSlope(x1, y1, x2, y2)*y - self.getSlope(x1, y1, x2, y2)*y1 + x1
 
+	# Draw Functions
 	def draw_border(self):
 		# A simple polygon algorithm is outlined in the following steps for n vertex
 		# points [(x1, y1), (x2, y2), ..., (xn, yn)], listed in the order to be connected:
@@ -95,16 +97,31 @@ class Polygon(Shape):
 
 		return solution
 
+	# Transformations
+	def translate(self, x, y):
+		tmp_list = []
+		for point in point_list:
+			tmp_list.append( (point[0]+x, point[1]+y) )
+		self.point_list = tmp_list
+	
+	def rotate(self, x, y, angle):
+		for i in range(len(self.point_list)):
+			# Two vertex points to local vars
+			x1 = self.point_list[i][0]
+			y1 = self.point_list[i][1]
+			x2 = self.point_list[(i+1)%len(self.point_list)][0]
+			y2 = self.point_list[(i+1)%len(self.point_list)][1]
+
+			# Preform rotation on temporary line 
+			tmp_line = Line(x1, y1, x2, y2)
+			tmp_line.rotate(x, y, angle)
+
+			# Rotated points back to point list
+			self.point_list[i] = (tmp_line.x1, tmp_line.y1)
+			self.point_list[(i+1)%len(self.point_list)] = (tmp_line.x2, tmp_line.y2)
+	
 	def scale(self, x, y, factor):
 		pass
-
-	def rotate(self, x, y, angle):
-		pass
-
-	def fill(self, color = None):
-		self.inside = self.draw_inside()
-		if color == None: self.inside_color = self.border_color
-		else: self.inside_color = color
 
 # Unit Testing
 if __name__ == "__main__":
@@ -114,15 +131,13 @@ if __name__ == "__main__":
 	img.fill( Color(245, 245, 245) )
 	# Create Polygon
 	point_list = [ (60,120), (110, 200), (110, 150), (200, 220), (160, 120) ]
-	polygon1 = Polygon( point_list, Color(255,0,255) )
+	polygon1 = Polygon( point_list, Color(255,0,0) )
 	# Translate/Move
-	polygon1.move( 50, -30 )
+	polygon1.translate( 50, -30 )
 	# Scale
-	polygon1.scale( 160, 120, 1.5 )
+	#polygon1.scale( 160, 120, 1.5 )
 	# Rotate
 	polygon1.rotate( 160, 120, -80 )
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)
-
-	
