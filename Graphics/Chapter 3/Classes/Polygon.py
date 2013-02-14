@@ -105,6 +105,7 @@ class Polygon(Shape):
 		self.point_list = tmp_list
 	
 	def rotate(self, x, y, angle):
+		tmp_point_list = []
 		for i in range(len(self.point_list)):
 			# Two vertex points to local vars
 			x1 = self.point_list[i][0]
@@ -117,11 +118,26 @@ class Polygon(Shape):
 			tmp_line.rotate(x, y, angle)
 
 			# Rotated points back to point list
-			self.point_list[i] = (tmp_line.x1, tmp_line.y1)
-			self.point_list[(i+1)%len(self.point_list)] = (tmp_line.x2, tmp_line.y2)
+			tmp_point_list.append((tmp_line.x1, tmp_line.y1))
+		self.point_list = tmp_point_list
+
 	
 	def scale(self, x, y, factor):
-		pass
+		tmp_point_list = []
+		for i in range(len(self.point_list)):
+			# Two vertex points to local vars
+			x1 = self.point_list[i][0]
+			y1 = self.point_list[i][1]
+			x2 = self.point_list[(i+1)%len(self.point_list)][0]
+			y2 = self.point_list[(i+1)%len(self.point_list)][1]
+
+			# Preform rotation on temporary line 
+			tmp_line = Line(x1, y1, x2, y2)
+			tmp_line.scale(x, y, factor)
+
+			# Rotated points back to point list
+			tmp_point_list.append((tmp_line.x1, tmp_line.y1))
+		self.point_list = tmp_point_list
 
 # Unit Testing
 if __name__ == "__main__":
@@ -135,7 +151,7 @@ if __name__ == "__main__":
 	# Translate/Move
 	polygon1.translate( 50, -30 )
 	# Scale
-	#polygon1.scale( 160, 120, 1.5 )
+	polygon1.scale( 160, 120, 1.5 )
 	# Rotate
 	polygon1.rotate( 160, 120, -80 )
 	# Blit and Create/Write Image
