@@ -100,13 +100,14 @@ class Polygon(Shape):
 	# Transformations
 	def translate(self, x, y):
 		tmp_list = []
-		for point in point_list:
+		for point in self.point_list:
 			tmp_list.append( (point[0]+x, point[1]+y) )
 		self.point_list = tmp_list
 	
 	def rotate(self, x, y, angle):
 		tmp_point_list = []
 		for i in range(len(self.point_list)):
+
 			# Two vertex points to local vars
 			x1 = self.point_list[i][0]
 			y1 = self.point_list[i][1]
@@ -151,9 +152,9 @@ if __name__ == "__main__":
 	# Translate/Move
 	polygon1.translate( 50, -30 )
 	# Scale
-	polygon1.scale( 160, 120, 1.5 )
+	#polygon1.scale( 160, 120, 1.5 ) # bug here
 	# Rotate
-	polygon1.rotate( 160, 120, -80 )
+	#polygon1.rotate( 160, 120, -80 ) # bug here
 	# Blit and Create/Write Image
 	img.blit( polygon1 )
 	makePPM('test.ppm', img)

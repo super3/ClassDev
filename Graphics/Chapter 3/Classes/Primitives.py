@@ -39,6 +39,7 @@ class Shape(object):
 		self.do_fill = True
 		if color == None: self.inside_color = self.border_color
 		else: self.inside_color = color
+		return self
 
 	# Cleanup Function
 	def remove_duplicates(self, points):

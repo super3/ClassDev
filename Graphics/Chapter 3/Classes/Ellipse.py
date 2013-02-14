@@ -107,8 +107,7 @@ if __name__ == "__main__":
 	# Fill Image with Color
 	img.fill( Color(245, 245, 245) )
 	# Create Ellipse Object
-	ellipse1 = Ellipse( 160, 120, 50, 100, Color(0,0,0) )
-	ellipse1.fill( Color(0,255,0) )
+	ellipse1 = Ellipse( 160, 120, 50, 100, Color(0,0,0)).fill( Color(0,255,0) )
 	# Blit and Create/Write Image
 	img.blit( ellipse1 )
 	makePPM('test.ppm', img)
