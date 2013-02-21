@@ -123,7 +123,7 @@ class Polygon(Shape):
 		self.point_list = tmp_point_list
 
 	
-	def scale(self, x, y, factor):
+	def scale(self, x, y, factor_x, factor_y):
 		tmp_point_list = []
 		for i in range(len(self.point_list)):
 			# Two vertex points to local vars
@@ -134,7 +134,7 @@ class Polygon(Shape):
 
 			# Preform rotation on temporary line 
 			tmp_line = Line(x1, y1, x2, y2)
-			tmp_line.scale(x, y, factor)
+			tmp_line.scale(x, y, factor_x, factor_y)
 
 			# Rotated points back to point list
 			tmp_point_list.append((tmp_line.x1, tmp_line.y1))
@@ -152,9 +152,9 @@ if __name__ == "__main__":
 	# Translate/Move
 	polygon1.translate( 50, -30 )
 	# Scale
-	#polygon1.scale( 160, 120, 1.5 ) # bug here
+	polygon1.scale( 160, 120, 1.5, 1.5 )
 	# Rotate
-	#polygon1.rotate( 160, 120, -80 ) # bug here
+	polygon1.rotate( 160, 120, -80 )
 	# Blit and Create/Write Image
-	img.blit( polygon1 )
+	img.blit( polygon1.fill() )
 	makePPM('test.ppm', img)

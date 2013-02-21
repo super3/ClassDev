@@ -13,6 +13,8 @@ class Line(Shape):
 		self.y2 = y2
 		# Color and Points
 		super(Line, self).__init__(color)
+	def __str__(self):
+		return "(%s, %s) to (%s, %s)" % (str(self.x1), str(self.y1), str(self.x2), str(self.y2))
 
 	# Equations
 	def getSlopeLong(self):
@@ -26,9 +28,9 @@ class Line(Shape):
 
 	# More Equations
 	def eq37(self, x, y, angle):
-		return (x * math.cos(angle)) - (y * math.sin(angle))
+		return ( x * math.cos(math.radians(angle)) ) - ( y * math.sin(math.radians(angle)) )
 	def eq38(self, x, y, angle):
-		return (y * math.cos(angle)) + (x * math.sin(angle))
+		return ( y * math.cos(math.radians(angle)) ) + ( x * math.sin(math.radians(angle)) )
 
 	# Draw Functions
 	def draw_border(self):
@@ -101,7 +103,7 @@ class Line(Shape):
 		# Translate resulting points by xt = xr and yt = yr
 		self.translate(x,y)
 
-	def scale(self, x, y, factor):
+	def scale(self, x, y, factor_x, factor_y):
 		"""
 		A simple scale algorithm to scale a line drawing by Sx and Sy for a fixed
 		point (xf, yf) is outlined in the following steps:
@@ -109,17 +111,13 @@ class Line(Shape):
 		"""
 		# Translate the end and start points by xt = −xf and yt = −yf
 		self.translate(-x,-y)
-		x1 = self.x1
-		x2 = self.x2
-		y1 = self.y1
-		y2 = self.y2
 
 		# Scale the translated x-values by Sx using Equation 3.9
-		self.x1 = round(x1*factor)
-		self.x2 = round(x2*factor)
+		self.x1 = round(self.x1*factor_x)
+		self.x2 = round(self.x2*factor_x)
 		# Scale the translated y-values by Sy using Equation 3.10
-		self.y1 = round(y1*factor)
-		self.y2 = round(y2*factor)
+		self.y1 = round(self.y1*factor_y)
+		self.y2 = round(self.y2*factor_y)
 
 		# Translate resulting points by xt = xf and yt = yf
 		self.translate(x,y)
@@ -137,8 +135,8 @@ if __name__ == "__main__":
 	line1.rotate( 160, 120, 45 )
 	line2.rotate( 160, 120, 45 )
 	# Scale
-	line1.scale( 160, 120, .5 )
-	line2.scale( 160, 120, .5 )
+	line1.scale( 160, 120, .5, .5 )
+	line2.scale( 160, 120, .5, .5 )
 	# Translate
 	line1.translate( 50, 50 )
 	line2.translate( 50, 50 )
