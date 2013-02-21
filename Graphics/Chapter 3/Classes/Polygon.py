@@ -83,7 +83,7 @@ class Polygon(Shape):
 		max_y = max(y[1] for y in self.point_list)
 
 		# Use the scan-line intersection algorithm to find intersections
-		for a in range(min_y, max_y):
+		for a in range(min_y+1, max_y): # min_y+1 to get throw away single bottom point, range throws away max_y
 			tmp = self.scan_line(a)
 			# sort intersections from minimal to maximal value based on the x values
 			tmp.sort( key=operator.itemgetter(0) ) 
@@ -139,6 +139,9 @@ class Polygon(Shape):
 			# Rotated points back to point list
 			tmp_point_list.append((tmp_line.x1, tmp_line.y1))
 		self.point_list = tmp_point_list
+
+	def scale_eq(self, x, y, factor):
+		self.scale(x, y, factor, factor)
 
 # Unit Testing
 if __name__ == "__main__":
