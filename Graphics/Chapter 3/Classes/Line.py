@@ -18,10 +18,18 @@ class Line(Shape):
 
 	# Equations
 	def getSlopeLong(self):
-		return (self.y2 - self.y1) / (self.x2 - self.x1)
+		try:
+			return (self.y2 - self.y1) / (self.x2 - self.x1)
+		except ZeroDivisionError:
+			print("ZeroDivisionError! " + str(self))
+			return 0
 
 	def getSlopeTall(self):
-		return (self.x2 - self.x1) / (self.y2 - self.y1)
+		try:
+			return (self.x2 - self.x1) / (self.y2 - self.y1)
+		except ZeroDivisionError:
+			print("ZeroDivisionError! " + str(self))
+			return 0
 
 	def getIntercept(self):
 		return ( -(self.getSlopeLong()) )*self.x1 + self.y1
