@@ -16,10 +16,10 @@ GeoPrimitive Module
 ---
 "Contains" all the geometric primitives for the 2D part of the engine. All the geometric primitives are based on the abtract class Shape. Included geometric primitives:
  
-* Line
-* Ellipse
-* Circle
-* Polygon
+* Line(x1, x2, y1, y2)
+* Ellipse(x1, y1, x2, y2, color)
+* Circle(x, y, radius, color)
+* Polygon(point_list, color)
 
 ***
 
@@ -52,6 +52,8 @@ Base class for all geometric primitives. If you are going to understand how this
 
 Class: Image
 ---
+Contains all pixel data for in image.
+
 #### Constructor
 * \_\_init\_\_ - Initializes vars. Fills background with white.
 
@@ -66,3 +68,26 @@ Class: Image
 * getIndex(x,y) - Get pixel index from (x,y).
 * blit(shapeObj) - Draw a shape onto the image.
 * save(path) - Saves a PPM file to the specified path. 
+
+***
+
+Sample Code
+---
+Assuming the proper classes have been imported. 
+
+    # Create a Blank Image
+    img = Image(320, 240)
+    # Fill Image with an Off-White Color
+    img.fill( Color(245, 245, 245) )
+    # Create Line
+    line1 = Line( 60, 120, 160, 120, Color(255, 0, 0) )
+    # Rotate Line
+    line1.rotate( 160, 120, 45 )
+    # Scale Line
+    line1.scale( 160, 120, .5, .5 )
+    # Translate Line
+    line1.translate( 50, 50 )
+    # Draw Line on Image
+    img.blit( line1 )
+    # Create/Write Image
+    img.save('test.ppm')
