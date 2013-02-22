@@ -11,6 +11,13 @@ from GeoPrimitives import Line
 # Line 3D
 class Line3D:
 	# Constructor
-	def __init__(self):
-		pass
+	def __init__(self, x, y, z):
+		self.x = x
+		self.y = y
+		self.z = z
+		self
+	def eq(self, xya, za, d):
+		"""Works for Equation 4.1 and 4.2."""
+		return (xya/za) * d
+	def project(self):
 		
