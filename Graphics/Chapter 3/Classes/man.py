@@ -12,7 +12,7 @@ img.fill( Color(255, 255, 255) )
 
 # The head is made from a circle with center point of (160,120) and
 # radius of 20.
-img.blit( Circle(160,200,20).fill( Color(255, 255, 51) ) ) # bug here
+img.blit( Circle(160,200,20).fill( Color(255, 255, 51) ) )
 
 # The neck is made from a line with start and end points of (160,180)
 # and (160,170).
@@ -60,7 +60,7 @@ line1 = Line(100, 125, 100, 50)
 
 # The flag is a polygon with vertex points of (100,125), (100,95), and
 # (60,110)
-polygon1 = Polygon([(100,125), (100,95), (60,110)]) # bug here #.fill( Color(128, 0, 128) )
+polygon1 = Polygon([(100,125), (100,95), (60,110)]).fill( Color(128, 0, 128) )
 
 # The pole and flag are translated by (0,35), in order to fit in the right
 # hand of the stick figure.
@@ -74,12 +74,12 @@ polygon1.rotate(100,100,45)
 
 # The pole and flag are scaled by 1.25 in the x and y values for a fix
 # point of (100,100), to be larger in the right hand of the stick figure.
-line1.scale(100,100,1.25)
-polygon1.scale(100,100,1.25)
+line1.scale(100,100,1.25,1.25)
+polygon1.scale(100,100,1.25,1.25)
 
 # Blit Rest
 img.blit( line1 )
 img.blit( polygon1 )
 
 # Create/Write Image
-makePPM('test.ppm', img)
+img.save('test.ppm')
