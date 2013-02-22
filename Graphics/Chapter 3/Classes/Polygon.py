@@ -160,4 +160,4 @@ if __name__ == "__main__":
 	polygon1.rotate( 160, 120, -80 )
 	# Blit and Create/Write Image
 	img.blit( polygon1.fill() )
-	makePPM('test.ppm', img)
+	img.save('test.ppm')

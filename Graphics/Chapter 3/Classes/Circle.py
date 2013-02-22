@@ -18,4 +18,4 @@ if __name__ == "__main__":
 	circle1.fill()
 	# Blit and Create/Write Image
 	img.blit( circle1 )
-	makePPM('test.ppm', img)
+	img.save('test.ppm')

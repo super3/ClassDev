@@ -11,7 +11,6 @@ Contains the bare essentials for the engine to run. These include:
 * Color (`class`) - Object to contain RGB color info for pixels. Might use a 3 item tuple instead.
 * Shape (`class`) - Base class for all geometric primitives.
 * Image (`class`) - Object that contains all the pixel data for an image.
-* makePPM (`function`) - Writes an Image object to a PPM file.
 
 GeoPrimitive Module
 ---
@@ -29,7 +28,7 @@ Abtract Class: Shape
 Base class for all geometric primitives. If you are going to understand how this works you will need to read this first. 
 
 #### Constructor and Magics
-* \_\_init\_\_ - Initializes vars, and draws the objects border.
+* \_\_init\_\_ - Initializes vars.
 * \_\_str\_\_ (return `String`) - Prints out all draw points for the shape. Primarily for debugging.
 
 #### Vars
@@ -38,10 +37,32 @@ Base class for all geometric primitives. If you are going to understand how this
 * border (type `2-tuples List`) - Contains all the draw points for the shape's border.
 * inside (type `2-tuples List`) - Contains all the draw points for the shape's inside (or fill).
 
+#### Draw Methods
+* draw() - Calculates all draw points for the shape, and stores in class data.
+* draw_border() - Calculates a shape's border points. Implemented by child class.
+* draw_inside() - Calculates a shapes's inside points (or fill). Implemented by child class.
+* fill(color) - Fills the shape with a color. If no color is passed, then the border color will be used.
+* remove_duplicates () - Removes all duplicate points for a passed list.
+
+#### Transformation Methods
+* move(x, y) - Translates a shape. Should be used instead of translate to avoid redrawing.
+* translate(x, y) - Translates a shape. 
+* rotate(x, y, angle) - Rotates a shape. 
+* scale(x, y, factor_x, factor_y) - Scales a shape. 
+
+Class: Image
+---
+#### Constructor
+* \_\_init\_\_ - Initializes vars. Fills background with white.
+
+#### Vars
+* x (type `int`) - X size of image.
+* y (type `int`) - Y size of image.
+* inten (type `int`) - Intensity of pixels. (Default is 255). 
+* img - Array of pixels.
+
 #### Methods
-* draw (return `2-tuples List`) - Calculates all draw points for the shape. Handled by child classes. 
-* remove_duplicates (return ` List`) - Removes all duplicate points for a passed list.
-* move(return `None`) - Translates a shape. Should be used instead of translate to avoid redrawing.
-* translate(return `None`) - Translates a shape. 
-* rotate(return `None`) - Rotates a shape. 
-* scale(return `None`) - Scales a shape. 
+* fill(color) - Fill the image with a passed background color. Default white.
+* getIndex(x,y) - Get pixel index from (x,y).
+* blit(shapeObj) - Draw a shape onto the image.
+* save(path) - Saves a PPM file to the specified path. 

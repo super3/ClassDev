@@ -1,5 +1,6 @@
 # Pixel Class
 class Color:
+	"""Contains RGB color info for pixels. Might use a 3 item tuple instead."""
 	def __init__(self, r, g, b):
 		self.r = r
 		self.g = g
@@ -9,9 +10,9 @@ class Color:
 
 # Shape Class
 class Shape(object):
+	"""Base class for Geometric Primitives."""
 	# Magic Functions
 	def __init__(self, color=Color(0,0,0)):
-		"""Base class for Geometric Primitives."""
 		self.border_color = color
 		self.inside_color = color
 		self.border = []
@@ -36,6 +37,7 @@ class Shape(object):
 		"""Calculates a shapes's inside points (or fill)."""
 		raise NotImplementedError
 	def fill(self, color = None):
+		"""Fills the shape with a color. If no color is passed, then the border color will be used."""
 		self.do_fill = True
 		if color == None: self.inside_color = self.border_color
 		else: self.inside_color = color
@@ -68,24 +70,30 @@ class Shape(object):
 		raise NotImplementedError
 	def rotate(self, x, y, angle):
 		raise NotImplementedError
-	def scale(self, x, y, factor):
+	def scale(self, x, y, factor_x, factor_y):
 		raise NotImplementedError
 
 # Image Class
 class Image:
+	"""Contains all pixel data for in image."""
 	def __init__(self, size_x, size_y, inten = 255):
+		"""Initialize vars, and fill image with white."""
 		self.x = size_x
 		self.y = size_y
 		self.inten = inten
 		self.img = []
-	def fill(self, color):
+		self.fill()
+	def fill(self, color=Color(255,255,255)):
+		"""Fill the image with a passed background color. Default white."""
 		for y in range(self.y):
 			for x in range(self.x):
 				self.img.append( color )
 	def getIndex(self, x, y):
+		"""Get pixel index from (x,y)."""
 		# I = x + xd(yd − y − 1) + 1
 		return x + self.x * ( self.y - y - 1 ) - 1
 	def blit(self, shapeObj):
+		"""Draw a shape onto the image."""
 		# Calculate Object's Points
 		shapeObj.draw()
 		# Draw Object on Image
@@ -93,16 +101,16 @@ class Image:
 			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.inside_color
 		for point in shapeObj.border:
 			self.img[ self.getIndex(point[0], point[1]) ] = shapeObj.border_color
-
-# PPM Function
-def makePPM(filename, img):
-	"""Write to a PPM file."""
-	head = "P3\n"
-	head += "# Created by Shawn Wilkinson\n"
-	head += str(img.x) + " " + str(img.y) + "\n"
-	head += str(img.inten) + "\n"
-	f = open(filename, 'w+')
-	f.write(head)
-	for pix in img.img:
-		f.write(str(pix))
-	f.close()
+	def save(self, path):
+		"""Saves a PPM file to the specified path."""
+		# Header
+		head = "P3\n"
+		head += "# Created by Shawn Wilkinson\n"
+		head += str(self.x) + " " + str(self.y) + "\n"
+		head += str(self.inten) + "\n"
+		# Write to File
+		f = open(path, 'w+')
+		f.write(head)
+		for pix in self.img:
+			f.write(str(pix))
+		f.close()

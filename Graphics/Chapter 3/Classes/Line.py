@@ -151,4 +151,4 @@ if __name__ == "__main__":
 	# Blit and Create/Write Image
 	img.blit( line1 )
 	img.blit( line2 )
-	makePPM('test.ppm', img) 
+	img.save('test.ppm')

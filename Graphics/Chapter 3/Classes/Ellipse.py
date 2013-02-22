@@ -95,10 +95,10 @@ class Ellipse(Shape):
 		# for every single border point. 
 		raise NotImplementedError
 
-	def scale(self, x, y, factor):
+	def scale(self, x, y, factor_x, factor_y):
 		# This only scales on the center point.
-		self.a *= factor
-		self.b *= factor
+		self.a *= factor_x
+		self.b *= factor_y
 
 # Unit Testing
 if __name__ == "__main__":
@@ -110,4 +110,4 @@ if __name__ == "__main__":
 	ellipse1 = Ellipse( 160, 120, 50, 100, Color(0,0,0)).fill( Color(0,255,0) )
 	# Blit and Create/Write Image
 	img.blit( ellipse1 )
-	makePPM('test.ppm', img)
+	img.save('test.ppm')
