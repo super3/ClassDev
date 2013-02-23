@@ -61,6 +61,22 @@ class Line3D:
 		# 4. Find the points between each start and end point using the line algorithm in section 2.1
 		return tmp_line
 
+	def view(self, a, b):
+		"""
+		A simple 3D view algorithm to define a view for a 3D environment given
+		α and β is outlined in the following steps:
+
+		"""
+
+		# 1. Initialize ~u to (1, 0, 0), ~v to (0, 1, 0), and ~n to (0, 0, 1)
+		# 2. Rotate ~u by β using Equations 4.19, 4.20, and 4.21
+		# 3. Rotate ~v by β using Equations 4.22, 4.23, and 4.24
+		# 4. Rotate ~n by β using Equations 4.25, 4.26, and 4.27
+		# 5. Rotate the result of step 2 by α using Equations 4.10, 4.11, and 4.12
+		# 6. Rotate the result of step 3 by α using Equations 4.13, 4.14, and 4.15
+		# 7. Rotate the result of step 4 by α using Equations 4.16, 4.17, and 4.18
+		pass
+
 # Unit Tests
 if __name__ == "__main__":
 	line0 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (160, 120), scale = 10
