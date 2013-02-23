@@ -21,8 +21,6 @@ class Line3D:
 	def eq(self, xya, za, d):
 		"""Works for Equation 4.1 and 4.2."""
 		return (xya/za) * d
-	def eq43(self):
-		pass
 
 	def project(self, d):
 		"""
@@ -43,33 +41,37 @@ class Line3D:
 		
 		return Line(x1, y1, x2, y2)
 
-	def display(self, translate, scale):
+	def display(self, d, translate, scale):
 		"""
-		For a translation location at (xL, yL) and a scale factor of sf , a simple
+		For a translation location at (xL, yL) and a scale factor of sf, a simple
 		display algorithm to display points projected onto a view plane (as describe
 		in section 4.2) as 2D lines is as follows:
 
 		"""
 
-		pass
+		tmp_line = self.project(d)
 		# 1. Find the center of the 2D points using Equations 4.3 and 4.4.
-		# 2. Translate the start and end points of each line using the
-		# translation algorithm in section 3.1, where xt and yt are found from Equations 4.5 and 4.6
+		xc, yc = tmp_line.get_center()
+		# 2. Translate the start and end points of each line using the translation algorithm in
+		# section 3.1, where xt and yt are found from Equations 4.5 and 4.6
+		tmp_line.translate(translate[0]-xc, translate[1]-yc)
 		# 3. Scale the translated start and end points from Step 2 by Sx = sf and Sy = sf for a fix point of (xL, yL) 
 		# using the scale algorithm in section 3.3.
+		tmp_line.scale_eq(translate[0], translate[1], scale)
 		# 4. Find the points between each start and end point using the line algorithm in section 2.1
-
-	# Draw Functions
-	def draw(self, d):
-		pass
-
+		return tmp_line
 
 # Unit Tests
 if __name__ == "__main__":
-	line1 = Line3D( (35,40,70), (20,30,50) ) # d = 20
-	print( line1.project(20) )
-	# Output: Projected Start-Point = (10, 11.43), Projected End-Point = (8, 12)
+	line0 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (160, 120), scale = 10
+	print( line0.display(20, (160,120), 10) )
+	# Output: Displayed Start-Point = (170, 117), Displayed End-Point = (150, 123)
 
-	line2 = Line3D( (35,40,70), (20,30,50) ) # d = -20
-	print( line1.project(-20) )
-	# Output: Projected Start-Point = (−10, −11.43), Projected End-Point = (−8, −12)
+	print("")
+
+	line1 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (500, 500), scale = 10
+	line2 = Line3D( (55,40,20), (30,50,10) )
+	print( line1.display(20, (500,500), 10) )
+	print( line2.display(20, (500,500), 10) )
+	# Output: Line 1 – Displayed Start-Point = (260, 57), and Displayed End-Point = (240, 63); 
+	# 		  Line 2 – Displayed Start-Point = (710, 343), and Displayed End-Point = (760, 943)

@@ -47,6 +47,10 @@ class Line(Shape):
 		return ( x * math.cos(math.radians(angle)) ) - ( y * math.sin(math.radians(angle)) )
 	def eq38(self, x, y, angle):
 		return ( y * math.cos(math.radians(angle)) ) + ( x * math.sin(math.radians(angle)) )
+	def get_center(self):
+		xc = (self.x1 + self.x2) / 2
+		yx = (self.y1 + self.y2) / 2
+		return (xc,yx)
 
 	# Draw Functions
 	def draw_border(self):

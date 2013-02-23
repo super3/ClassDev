@@ -79,6 +79,8 @@ class Shape(object):
 		raise NotImplementedError
 	def scale(self, x, y, factor_x, factor_y):
 		raise NotImplementedError
+	def scale_eq(self, x, y, factor):
+		self.scale(x, y, factor, factor)
 
 # Image Class
 class Image:
