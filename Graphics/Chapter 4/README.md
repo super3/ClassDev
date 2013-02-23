@@ -76,6 +76,8 @@ Sample Code
 Assuming the proper classes have been imported. 
 
 ### Line Example
+	# Imports
+	import Class.GeoPrimitives
 
     # Create a Blank Image
 	img = Image(320, 240)
