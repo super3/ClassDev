@@ -6,6 +6,7 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports 
+import math
 from GeoPrimitives import Image
 from GeoPrimitives import Line
 
@@ -21,7 +22,7 @@ class Line3D:
 	def eq(self, xya, za, d):
 		"""Works for Equation 4.1 and 4.2."""
 		return (xya/za) * d
-
+	
 	def project(self, d):
 		"""
 		A simple projection algorithm to project the vertex points of a 3D line
@@ -61,6 +62,36 @@ class Line3D:
 		# 4. Find the points between each start and end point using the line algorithm in section 2.1
 		return tmp_line
 
+# Arbitrary 3D View
+class Arbit3D:
+	# Constructor
+	def __init__(self, a, b):
+		pass
+
+	# Equations
+	def eq2(self, vector, b):
+		"""
+		u'1 = u1							(4.19)
+		u'2	= u2 * cos(β) − u3 * sin(β) 	(4.20)
+		u'3	= u3 * cos(β) + u2 * sin(β)	    (4.21)
+		
+		"""
+		vector1 = vector[0]
+		vector2 = (vector[1] * math.cos(math.radians(b))) - (vector[2] * math.sin(math.radians(b)))
+		vector3 = (vector[2] * math.cos(math.radians(b))) + (vector[1] * math.sin(math.radians(b)))
+		return (vector1, vector2, vector3)
+	def eq3(self, vector, a):
+		"""
+		u'1 = u1 * cos(α) + u3 * sin(α) 	(4.10)
+		u'2	= u2 							(4.11)
+		u'3	= u	3 * cos(α) − u1	* sin(α)    (4.12)
+
+		"""
+		vector1 = (vector[0] * math.cos(math.radians(a))) + (vector[2] * math.sin(math.radians(a)))
+		vector2 = vector[1]
+		vector3 = (vector[2] * math.cos(math.radians(a))) - (vector[0] * math.sin(math.radians(a)))
+		return (vector1, vector2, vector3)
+
 	def view(self, a, b):
 		"""
 		A simple 3D view algorithm to define a view for a 3D environment given
@@ -69,13 +100,47 @@ class Line3D:
 		"""
 
 		# 1. Initialize ~u to (1, 0, 0), ~v to (0, 1, 0), and ~n to (0, 0, 1)
+		u = (1, 0, 0)
+		v = (0, 1, 0)
+		n = (0, 0, 1)
+
 		# 2. Rotate ~u by β using Equations 4.19, 4.20, and 4.21
+		u = self.eq2(u, b)
 		# 3. Rotate ~v by β using Equations 4.22, 4.23, and 4.24
+		v = self.eq2(v, b)
 		# 4. Rotate ~n by β using Equations 4.25, 4.26, and 4.27
+		n = self.eq2(n, b)
+
 		# 5. Rotate the result of step 2 by α using Equations 4.10, 4.11, and 4.12
+		u = self.eq3(u, a)
 		# 6. Rotate the result of step 3 by α using Equations 4.13, 4.14, and 4.15
+		v = self.eq3(v, a)
 		# 7. Rotate the result of step 4 by α using Equations 4.16, 4.17, and 4.18
+		n = self.eq3(n, a)
+		
+		print(u)
+		print(v)
+		print(b) 
+		return u,v,n
+
+	def align(self):	
+		"""
+		A simple 3D view-alignment algorithm to align the view reference co-
+		ordinate system with the world coordinate-system, for a VRP = (xvrp, yvrp, zvrp),
+		CoP = (0, 0, dn), and view reference coordinate system = [~u,~v, ~n], is as follows:
+
+		"""
+
+		# 1. For each vertex point
+		# (a) Translate the x-values by -xvrp	using Equation 4.28
+		# (b) Translate the y-values by -yvrp	using Equation 4.29
+		# (c) Translate the z-values by -zvrp	using Equation 4.30
+		# (d) Rotate the new x-values from step (a) by ~u using Equation 4.31
+		# (e) Rotate the new y-values from step (b) by ~v using Equation 4.32
+		# (f) Rotate the new z-values from step (c) by ~n using Equation 4.33
+		# (g) Translate the new z-values from step (f) by −dn	using Equation 4.36
 		pass
+
 
 # Unit Tests
 if __name__ == "__main__":
