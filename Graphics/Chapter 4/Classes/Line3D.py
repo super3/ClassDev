@@ -76,10 +76,11 @@ class Line3D:
 class Arbit3D:
 	# Constructor
 	def __init__(self, a, b):
-		pass
+		self.a = a
+		self.b = b
 
 	# Equations
-	def eq2(self, vector, b):
+	def eq(self, vector, b):
 		"""
 		u'1 = u1							(4.19)
 		u'2	= u2 * cos(β) − u3 * sin(β) 	(4.20)
@@ -89,8 +90,8 @@ class Arbit3D:
 		vector1 = vector[0]
 		vector2 = (vector[1] * math.cos(math.radians(b))) - (vector[2] * math.sin(math.radians(b)))
 		vector3 = (vector[2] * math.cos(math.radians(b))) + (vector[1] * math.sin(math.radians(b)))
-		return (vector1, vector2, vector3)
-	def eq3(self, vector, a):
+		return (round(vector1,4), round(vector2,4), round(vector3,4))
+	def eq2(self, vector, a):
 		"""
 		u'1 = u1 * cos(α) + u3 * sin(α) 	(4.10)
 		u'2	= u2 							(4.11)
@@ -100,9 +101,9 @@ class Arbit3D:
 		vector1 = (vector[0] * math.cos(math.radians(a))) + (vector[2] * math.sin(math.radians(a)))
 		vector2 = vector[1]
 		vector3 = (vector[2] * math.cos(math.radians(a))) - (vector[0] * math.sin(math.radians(a)))
-		return (vector1, vector2, vector3)
+		return (round(vector1,4), round(vector2,4), round(vector3,4))
 
-	def view(self, a, b):
+	def view(self):
 		"""
 		A simple 3D view algorithm to define a view for a 3D environment given
 		α and β is outlined in the following steps:
@@ -115,23 +116,23 @@ class Arbit3D:
 		n = (0, 0, 1)
 
 		# 2. Rotate ~u by β using Equations 4.19, 4.20, and 4.21
-		u = self.eq2(u, b)
+		u = self.eq(u, self.b)
 		# 3. Rotate ~v by β using Equations 4.22, 4.23, and 4.24
-		v = self.eq2(v, b)
+		v = self.eq(v, self.b)
 		# 4. Rotate ~n by β using Equations 4.25, 4.26, and 4.27
-		n = self.eq2(n, b)
+		n = self.eq(n, self.b)
 
 		# 5. Rotate the result of step 2 by α using Equations 4.10, 4.11, and 4.12
-		u = self.eq3(u, a)
+		u = self.eq2(u, self.a)
 		# 6. Rotate the result of step 3 by α using Equations 4.13, 4.14, and 4.15
-		v = self.eq3(v, a)
+		v = self.eq2(v, self.a)
 		# 7. Rotate the result of step 4 by α using Equations 4.16, 4.17, and 4.18
-		n = self.eq3(n, a)
+		n = self.eq2(n, self.a)
 		
 		print(u)
 		print(v)
-		print(b) 
-		return u,v,n
+		print(n) 
+		#return u,v,n
 
 	def align(self):	
 		"""
@@ -154,21 +155,5 @@ class Arbit3D:
 
 # Unit Tests
 if __name__ == "__main__":
-	line0 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (160, 120), scale = 10
-	print( line0.display(20, (160,120), 10, line0.project(20).get_points()) )
-	# Output: Displayed Start-Point = (170, 117), Displayed End-Point = (150, 123)
-
-	print("")
-
-	line1 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (500, 500), scale = 10
-	line2 = Line3D( (55,40,20), (30,50,10) )
-
-	points = []
-	points.extend( line1.project(20).get_points() )
-	points.extend( line2.project(20).get_points() )
-	print(points)
-
-	print( line1.display(20, (500,500), 10, points) )
-	print( line2.display(20, (500,500), 10, points) )
-	# Output: Line 1 – Displayed Start-Point = (260, 57), and Displayed End-Point = (240, 63); 
-	# 		  Line 2 – Displayed Start-Point = (710, 343), and Displayed End-Point = (760, 943)
+	arbit = Arbit3D(-15, 62)
+	arbit.view()
