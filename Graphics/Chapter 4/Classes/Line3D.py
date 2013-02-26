@@ -42,7 +42,17 @@ class Line3D:
 		
 		return Line(x1, y1, x2, y2)
 
-	def display(self, d, translate, scale):
+	def get_center(self, points):
+		# Get Mins and Maxes
+		min_x = min(x[0] for x in points)
+		max_x = max(x[0] for x in points)
+		min_y = min(y[1] for y in points)
+		max_y = max(y[1] for y in points)
+		xc = (max_x + min_x) / 2
+		yc = (max_y + min_y) / 2
+		return (xc, yc)
+
+	def display(self, d, translate, scale, points):
 		"""
 		For a translation location at (xL, yL) and a scale factor of sf, a simple
 		display algorithm to display points projected onto a view plane (as describe
@@ -52,7 +62,7 @@ class Line3D:
 
 		tmp_line = self.project(d)
 		# 1. Find the center of the 2D points using Equations 4.3 and 4.4.
-		xc, yc = tmp_line.get_center()
+		xc, yc = self.get_center(points)
 		# 2. Translate the start and end points of each line using the translation algorithm in
 		# section 3.1, where xt and yt are found from Equations 4.5 and 4.6
 		tmp_line.translate(translate[0]-xc, translate[1]-yc)
@@ -145,14 +155,20 @@ class Arbit3D:
 # Unit Tests
 if __name__ == "__main__":
 	line0 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (160, 120), scale = 10
-	print( line0.display(20, (160,120), 10) )
+	print( line0.display(20, (160,120), 10, line0.project(20).get_points()) )
 	# Output: Displayed Start-Point = (170, 117), Displayed End-Point = (150, 123)
 
 	print("")
 
 	line1 = Line3D( (35,40,70), (20,30,50) ) # d = 20, translate (500, 500), scale = 10
 	line2 = Line3D( (55,40,20), (30,50,10) )
-	print( line1.display(20, (500,500), 10) )
-	print( line2.display(20, (500,500), 10) )
+
+	points = []
+	points.extend( line1.project(20).get_points() )
+	points.extend( line2.project(20).get_points() )
+	print(points)
+
+	print( line1.display(20, (500,500), 10, points) )
+	print( line2.display(20, (500,500), 10, points) )
 	# Output: Line 1 – Displayed Start-Point = (260, 57), and Displayed End-Point = (240, 63); 
 	# 		  Line 2 – Displayed Start-Point = (710, 343), and Displayed End-Point = (760, 943)

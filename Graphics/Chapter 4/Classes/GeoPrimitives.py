@@ -51,6 +51,8 @@ class Line(Shape):
 		xc = (self.x1 + self.x2) / 2
 		yx = (self.y1 + self.y2) / 2
 		return (xc,yx)
+	def get_points(self):
+		return [(self.x1, self.y1), (self.x2, self.y2)]
 
 	# Draw Functions
 	def draw_border(self):
