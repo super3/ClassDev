@@ -158,7 +158,23 @@ class Arbit3D:
 		print(n) 
 		#return u,v,n
 
-	def align(self):	
+# Arbit 3D View Alignment
+	# Constructor
+	def __init__(self, vertex_list):
+		pass
+
+	# Equations
+		def eq(self, vrp):
+			"""4.28 to 4.30"""
+			for vertex in vertex_list:
+				x = vertex[0] - vrp[0]
+				y = vertex[1] - vrp[1]
+				z = vertex[2] - vrp[2]
+				vertex = (x, y, z)
+		def eq2(self)
+			pass
+
+	def align(self, vrp, cop):	
 		"""
 		A simple 3D view-alignment algorithm to align the view reference coordinate system
 		with the world coordinate-system, for a VRP = (xvrp, yvrp, zvrp), CoP = (0, 0, dn),
@@ -167,28 +183,22 @@ class Arbit3D:
 		"""
 
 		# 1. For each vertex point
-		# (a) Translate the x-values by -xvrp	using Equation 4.28
-		# (b) Translate the y-values by -yvrp	using Equation 4.29
-		# (c) Translate the z-values by -zvrp	using Equation 4.30
-		# (d) Rotate the new x-values from step (a) by ~u using Equation 4.31
-		# (e) Rotate the new y-values from step (b) by ~v using Equation 4.32
-		# (f) Rotate the new z-values from step (c) by ~n using Equation 4.33
-		# (g) Translate the new z-values from step (f) by −dn	using Equation 4.36
-		pass
+		for vertex in vertex_list:
+			# (a) Translate the x-values by -xvrp	using Equation 4.28
+			# (b) Translate the y-values by -yvrp	using Equation 4.29
+			# (c) Translate the z-values by -zvrp	using Equation 4.30
+			self.eq(vrp)
+			# (d) Rotate the new x-values from step (a) by ~u using Equation 4.31
+			# (e) Rotate the new y-values from step (b) by ~v using Equation 4.32
+			# (f) Rotate the new z-values from step (c) by ~n using Equation 4.33
+			# (g) Translate the new z-values from step (f) by −dn	using Equation 4.36
+			pass
 
 
 # Unit Tests
 if __name__ == "__main__":
 	world1 = World3D()
-	world1.add( Line3D( (35,40,70), (20,30,50) ) ) # d = 20, translate (160, 120), scale = 10
-	print( world1.display(20, (160,120), 10) )
-	# Output: Displayed Start-Point = (170, 117), Displayed End-Point = (150, 123)
-
-	print("")
-
-	world2 = World3D()
-	world2.add( Line3D( (35,40,70), (20,30,50) ) ) # d = 20, translate (500, 500), scale = 10
-	world2.add( Line3D( (55,40,20), (30,50,10) ) )
-	print( world2.display(20, (500,500), 10) )
-	# Output: Line 1 – Displayed Start-Point = (260, 57), and Displayed End-Point = (240, 63); 
-	# 		  Line 2 – Displayed Start-Point = (710, 343), and Displayed End-Point = (760, 943)
+	world1.add( Line3D( (35,40,70), (20,30,50) ) )
+	#world1.align()
+	# VRP = (20, 20, 75), CoP = (0, 0, 20), ~u = (0.7071, 0.7071, 0), ~v = (0, 0, 1), ~n = (0.7071, −0.7071, 0)
+	# Output: Aligned Start-Point = (24.7487, −5, −23.5355), Aligned End-Point = (7.0711, −25, −27.0711)
