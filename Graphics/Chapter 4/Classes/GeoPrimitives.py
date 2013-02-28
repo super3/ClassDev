@@ -144,6 +144,15 @@ class Line(Shape):
 		# Translate resulting points by xt = xf and yt = yf
 		self.translate(x,y)
 
+	# Hacks
+	def minX(self):
+		return min(self.x1,self.x2)
+	def maxX(self):
+		return max(self.x1,self.x2)
+	def minY(self):
+		return min(self.y1,self.y2)
+	def maxY(self):
+		return max(self.y1,self.y2)
 
 
 

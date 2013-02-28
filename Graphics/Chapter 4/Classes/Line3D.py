@@ -10,19 +10,33 @@ import math
 from GeoPrimitives import Image
 from GeoPrimitives import Line
 
-# Line 3D
-class Line3D:
+# Point 3D
+class Point3D:
 	# Constructor
-	def __init__(self, start_pt, end_pt):
-		# Private Vars
-		self.start_pt = start_pt
-		self.end_pt = end_pt
+	def __init__(self, point):
+		self.point = point # 3-tuple
 
 	# Equations
 	def eq(self, xya, za, d):
 		"""Works for Equation 4.1 and 4.2."""
 		return (xya/za) * d
-	
+
+	# Method
+	def get_2D_point(self, d):
+		"""Returns a 2-tuple 2D point from a passed d."""
+		x = self.eq(self.point[0], self.point[2], d)
+		y = self.eq(self.point[1], self.point[2], d)
+		return x,y
+
+# Line 3D
+class Line3D:
+	# Constructor
+	def __init__(self, start_pt, end_pt):
+		# Private Vars
+		self.start_pt = Point3D(start_pt)
+		self.end_pt = Point3D(end_pt)
+
+	# Equations
 	def project(self, d):
 		"""
 		A simple projection algorithm to project the vertex points of a 3D line
@@ -31,46 +45,56 @@ class Line3D:
 
 		"""
 
-		# 1. Project the x-values of the start and end points to the view plane using
-		# Equation 4.2
-		x1 = self.eq(self.start_pt[0], self.start_pt[2], d)
-		y1 = self.eq(self.start_pt[1], self.start_pt[2], d)
-		# 2. Project the y-values of the start and end points to the view plane using
-		# Equation 4.1
-		x2 = self.eq(self.end_pt[0], self.end_pt[2], d)
-		y2 = self.eq(self.end_pt[1], self.end_pt[2], d)
+		# Project the x and y values of the start and end points to the view plane using
+		x1, y1 = self.start_pt.get_2D_point(d)
+		x2, y2 = self.end_pt.get_2D_point(d)
 		
+		# Return a 2D line object
 		return Line(x1, y1, x2, y2)
 
-	def get_center(self, points):
-		# Get Mins and Maxes
-		min_x = min(x[0] for x in points)
-		max_x = max(x[0] for x in points)
-		min_y = min(y[1] for y in points)
-		max_y = max(y[1] for y in points)
+# World 3D
+class World3D:
+	# Constructor
+	def __init__(self):
+		self.object_list = []
+	def add(self, an_object):
+		self.object_list.append( an_object )
+
+	def get_center(self, lines):
+		min_x = min(x.minX() for x in lines)
+		max_x = max(x.maxX() for x in lines)
+		min_y = min(y.minY() for y in lines)
+		max_y = max(y.maxY() for y in lines)
 		xc = (max_x + min_x) / 2
 		yc = (max_y + min_y) / 2
 		return (xc, yc)
 
-	def display(self, d, translate, scale, points):
+	def display(self, d, translate, scale):
 		"""
 		For a translation location at (xL, yL) and a scale factor of sf, a simple
 		display algorithm to display points projected onto a view plane (as describe
 		in section 4.2) as 2D lines is as follows:
 
 		"""
-
-		tmp_line = self.project(d)
+		
+		# 3D to 2D Lines
+		tmp_lines = []
+		for line_3D in self.object_list:
+			tmp_lines.append( line_3D.project(d) )
 		# 1. Find the center of the 2D points using Equations 4.3 and 4.4.
-		xc, yc = self.get_center(points)
+		xc, yc = self.get_center(tmp_lines)
 		# 2. Translate the start and end points of each line using the translation algorithm in
 		# section 3.1, where xt and yt are found from Equations 4.5 and 4.6
-		tmp_line.translate(translate[0]-xc, translate[1]-yc)
+		for line in tmp_lines: 
+			line.translate(translate[0]-xc, translate[1]-yc)
 		# 3. Scale the translated start and end points from Step 2 by Sx = sf and Sy = sf for a fix point of (xL, yL) 
 		# using the scale algorithm in section 3.3.
-		tmp_line.scale_eq(translate[0], translate[1], scale)
+		for line in tmp_lines: 
+			line.scale_eq(translate[0], translate[1], scale)
 		# 4. Find the points between each start and end point using the line algorithm in section 2.1
-		return tmp_line
+		for line in tmp_lines:
+			print(line)
+		return tmp_lines
 
 # Arbitrary 3D View
 class Arbit3D:
@@ -136,9 +160,9 @@ class Arbit3D:
 
 	def align(self):	
 		"""
-		A simple 3D view-alignment algorithm to align the view reference co-
-		ordinate system with the world coordinate-system, for a VRP = (xvrp, yvrp, zvrp),
-		CoP = (0, 0, dn), and view reference coordinate system = [~u,~v, ~n], is as follows:
+		A simple 3D view-alignment algorithm to align the view reference coordinate system
+		with the world coordinate-system, for a VRP = (xvrp, yvrp, zvrp), CoP = (0, 0, dn),
+		and view reference coordinate system = [~u,~v, ~n], is as follows:
 
 		"""
 
@@ -155,5 +179,16 @@ class Arbit3D:
 
 # Unit Tests
 if __name__ == "__main__":
-	arbit = Arbit3D(-15, 62)
-	arbit.view()
+	world1 = World3D()
+	world1.add( Line3D( (35,40,70), (20,30,50) ) ) # d = 20, translate (160, 120), scale = 10
+	print( world1.display(20, (160,120), 10) )
+	# Output: Displayed Start-Point = (170, 117), Displayed End-Point = (150, 123)
+
+	print("")
+
+	world2 = World3D()
+	world2.add( Line3D( (35,40,70), (20,30,50) ) ) # d = 20, translate (500, 500), scale = 10
+	world2.add( Line3D( (55,40,20), (30,50,10) ) )
+	print( world2.display(20, (500,500), 10) )
+	# Output: Line 1 – Displayed Start-Point = (260, 57), and Displayed End-Point = (240, 63); 
+	# 		  Line 2 – Displayed Start-Point = (710, 343), and Displayed End-Point = (760, 943)
