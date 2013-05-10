@@ -1,0 +1,8 @@
+PROGRAM APROG ( INPUT , OUTPUT ) ;
+VAR
+	I : INTEGER ;
+	J , K : CHAR ;
+BEGIN
+	I := PI * 2 ;
+	J := 4 + I ;
+END .
